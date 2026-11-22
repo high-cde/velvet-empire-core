@@ -44,6 +44,7 @@
     { label: "🏦 $OV Our Vault", href: "https://velvet.x-zdos.it/our-vault/" },
     { label: "📼 Videoteca", href: "https://velvet.x-zdos.it/live" },
     { label: "👑 Creator/Slave", href: "https://velvet.x-zdos.it/accesso" },
+    { label: "⚡ ZLang & Monete", href: "https://velvet.x-zdos.it/zlang/linguaggio/" },
     { label: "🧭 Command Deck", href: "https://velvet.x-zdos.it/command-deck/" },
     { label: "💬 Discord", href: "https://discord.gg/BcMh6vcpQX", ext: true }
   ];
