@@ -176,6 +176,45 @@ client.on("messageCreate", async message => {
   if (message.author.bot || !message.guild) return;
   const cmd = message.content.trim().toLowerCase();
 
+
+  if (cmd === "!aiuto" || cmd === "!comandi" || cmd === "!help" || cmd === "!velvet") {
+    const helpEmbed = new EmbedBuilder()
+      .setColor(0xC41E3A)
+      .setTitle("💋 OUR VELVET // GUIDA GLOBALE AI COMANDI & GIOCO")
+      .setDescription(
+        "Benvenuto nella Casa Chiusa di **Rubina**, **A$apKali**, **Zara** e **Vex**.
+" +
+        "Ogni stanza ha un personaggio vivo che ti accoglie e ricorda il tuo percorso.
+
+" +
+        "**🎭 VIDEOGIOCO INTERATTIVO ZLANG (Umano + AGI)**
+" +
+        "• **`!gioca`** *(o `!velvetgame`)* — Avvia la storia interattiva a bivi in base al tuo ruolo (`Mistress/Creator`, `Slave`, `Architetto`).
+" +
+        "• **`!card`** *(o `!badge`)* — Mostra la tua **Card Utente VelvetHub** e i Badge sbloccati dai 4 finali.
+
+" +
+        "**💎 CASINÒ, TREASURY SOLANA & SBLOCCHI VIP (`$OV` / `$DSN`)**
+" +
+        "• **`!listino`** — Visualizza i pacchetti VIP, stanze private e tributi on-chain.
+" +
+        "• **`!verifica <tx_hash>`** — Verifica istantaneamente una transazione Solana Mainnet e sblocca il grado.
+" +
+        "• **`!cassa`** — Controlla lo stato della Treasury (`6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD`).
+
+" +
+        "**🌐 PORTALI & NODI AGI CONNESSI**
+" +
+        "• **Terminale Zara AGI:** https://velvet.x-zdos.it/zara/
+" +
+        "• **VelvetHub Web:** https://velvet.x-zdos.it/ourvelvet
+" +
+        "• **Invito Ufficiale Server:** https://discord.gg/BcMh6vcpQX"
+      )
+      .setFooter({ text: "ZDOS Sovereign Network • Digita !gioca per iniziare subito" });
+    await message.reply({ embeds: [helpEmbed] });
+  }
+
   if (cmd === "!velvetgame" || cmd === "!gioca" || cmd === "!storia") {
     const role = detectUserRole(message.member);
     dbExec(`
