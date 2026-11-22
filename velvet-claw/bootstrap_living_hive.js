@@ -73,24 +73,6 @@ client.once("clientReady", async () => {
 
   console.log(`[HIVE] Trovate ${textChannels.length} stanze e ${agentBots.length} agenti/bot.`);
 
-  // 1. Sblocca permessi completi su tutte le stanze
-  for (const ch of textChannels) {
-    for (const bot of agentBots) {
-      await ch.permissionOverwrites.edit(bot.id, {
-        ViewChannel: true,
-        SendMessages: true,
-        ReadMessageHistory: true,
-        ManageWebhooks: true,
-        EmbedLinks: true,
-        AttachFiles: true,
-        UseExternalEmojis: true,
-        AddReactions: true,
-        ManageMessages: true
-      }).catch(() => {});
-    }
-  }
-  console.log("[HIVE] Permessi completi + ManageWebhooks applicati su tutte le stanze.");
-
   // 2. Costruisce i 118 personaggi e la mappa di conoscenza condivisa
   const prelim = textChannels.map((ch, idx) => {
     const catName = ch.parent ? ch.parent.name : "Velvet Sovereign";
