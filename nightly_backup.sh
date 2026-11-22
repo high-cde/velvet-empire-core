@@ -28,6 +28,7 @@ rsync -a --delete \
 [ -d /var/www/velvet-mining ] && rsync -a --delete /var/www/velvet-mining/ "$SYNC_DIR/web-mining/"
 [ -d /var/www/velvet-magazine ] && rsync -a --delete /var/www/velvet-magazine/ "$SYNC_DIR/web-magazine/"
 [ -d /var/www/velvet-portal ] && rsync -a --delete /var/www/velvet-portal/ "$SYNC_DIR/web-portal/"
+[ -d /var/www/zdos-portal ] && rsync -a --delete /var/www/zdos-portal/ "$SYNC_DIR/zdos-portal/"
 [ -f /etc/nginx/sites-enabled/velvethub ] && cp /etc/nginx/sites-enabled/velvethub "$SYNC_DIR/nginx/velvethub.conf"
 
 cd "$SYNC_DIR"
