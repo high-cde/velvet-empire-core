@@ -1,0 +1,33 @@
+// ZLang v2.0 — Sovereign Interactive Engine: OUR VELVET
+module OurVelvetSaga {
+  const WORLD = "Our Velvet — Casa Chiusa di Rubina";
+  const CAST = ["Rubina", "A$apKali", "Zara", "Vex"];
+
+  state PlayerSession {
+    user_id: str;
+    role: str;          // "creator" | "slave" | "casual"
+    card_tier: str;     // Collegato alla Card Utente VelvetHub
+    act: int = 1;
+    devotion: int = 0;
+    dominance: int = 0;
+    vice_index: int = 0;
+    badge_unlocked: str = "NONE";
+  }
+
+  fn resolve_ending(s: PlayerSession) -> str {
+    if (s.role == "creator" && s.dominance >= 3) {
+      s.badge_unlocked = "SOVEREIGN_MISTRESS_NSWT";
+      return "FINALE_I_TRONO_CREMISI";
+    }
+    if (s.role == "slave" && s.devotion >= 3) {
+      s.badge_unlocked = "DEVOTED_VELVET_SLAVE";
+      return "FINALE_II_SIGILLO_ACCIAIO";
+    }
+    if (s.vice_index >= 3) {
+      s.badge_unlocked = "ZDOS_SHADOW_ARCHITECT";
+      return "FINALE_III_CUORE_DEL_CODICE";
+    }
+    s.badge_unlocked = "EXILED_FROM_VELVET";
+    return "FINALE_IV_ESILIO_ALBA";
+  }
+}
