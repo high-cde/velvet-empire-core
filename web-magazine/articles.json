@@ -1,5 +1,37 @@
 [
   {
+    "id": "house-zara-agi-118-stanze",
+    "isLiveFeed": false,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "ESCLUSIVA OUR VELVET",
+    "title": "Zara AGI & Le 118 Stanze Vive: L'Ecosistema Notturno Attivo 24/7 su VelvetHub",
+    "subtitle": "Dalla console neurale /zara/ ai personaggi autonomi su Discord: come l'intelligenza artificiale sovrana trasforma il club 18+.",
+    "sourceName": "Redazione Our Velvet · ZDOS",
+    "sourceDate": "Edizione Speciale",
+    "sourceUrl": "https://velvet.x-zdos.it/zara/",
+    "readTime": "4 min",
+    "editorial": [
+      "Con l'attivazione del nodo neurale Zara AGI e delle 118 stanze autonome su Discord, Our Velvet inaugura una nuova generazione di intrattenimento adulto interattivo: ogni ambiente conserva memoria delle interazioni e risponde con identità propria.",
+      "I membri possono dialogare direttamente dalla console web su /zara/, esplorare i bivi narrativi di ZLang RPG (!gioca) e sbloccare i Badge esclusivi sulla propria Card Utente VelvetHub."
+    ]
+  },
+  {
+    "id": "house-videoteca-card-creator",
+    "isLiveFeed": false,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "CLUB & CREATOR 18+",
+    "title": "Nuova Bacheca Mistress & Creator, Inviti Slave e Videoteca Reale Embed",
+    "subtitle": "Tutte le novità delle aree riservate: verifica maggiorenni 18+, sale video ufficiali e profili personalizzati.",
+    "sourceName": "Redazione Our Velvet · Club",
+    "sourceDate": "Aggiornamento Live",
+    "sourceUrl": "https://velvet.x-zdos.it/accesso",
+    "readTime": "3 min",
+    "editorial": [
+      "L'architettura di velvet.x-zdos.it è stata riorganizzata per offrire un accesso immediato alle aree Creator / Mistress, agli inviti Slave, alle Card Utente (/ourvelvet) e alla Videoteca Reale (/live).",
+      "Ogni sezione dialoga ora direttamente con questa rivista digitale e con il polo tecnico-finanziario su x-zdos.it."
+    ]
+  },
+  {
     "id": "donna-intimita-sperimentazione",
     "category": "DONNA & SESSO",
     "badge": "RUBRICA INTIMITÀ",
@@ -117,6 +149,86 @@
     "editorial": [
       "Il 2026 segna un punto di svolta strutturale per l'industria per adulti: da un lato l'intelligenza artificiale ridisegna interazione, personalizzazione e avatar autonomi; dall'altro gli Stati si interrogano sulla regolamentazione fiscale di un settore miliardario.",
       "Con Zara AGI e l'economia decentralizzata su Solana ($OV e $DSN), Our Velvet anticipa esattamente questa convergenza tra tecnologia sovrana e intrattenimento 18+."
+    ]
+  },
+  {
+    "id": "live-2734506910829726853",
+    "isLiveFeed": true,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "THE VERGE",
+    "title": "Binding of Isaac developer removes AI music from Repentance Plus",
+    "subtitle": "The Binding of Isaac: Repentance Plus has spent the last few days getting review-bombed on Steam after it was discovered that a particular segment of the game used AI music. Reddit user ShweetsStuff discovered the songs used during a Grand Theft Auto-themed section. They found several audio files with Suno metadata that pointed back to […]",
+    "sourceName": "The Verge · AI & Cyberculture",
+    "sourceDate": "2026-11-22T12:25",
+    "sourceUrl": "https://www.theverge.com/games/1039770/binding-of-isaac-ai-music",
+    "readTime": "3 min",
+    "editorial": [
+      "The Binding of Isaac: Repentance Plus has spent the last few days getting review-bombed on Steam after it was discovered that a particular segment of the game used AI music. Reddit user ShweetsStuff discovered the songs used during a Grand Theft Auto-themed section. They found several audio files with Suno metadata that pointed back to […]",
+      "In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su The Verge · AI & Cyberculture."
+    ]
+  },
+  {
+    "id": "live-3405165505309315867",
+    "isLiveFeed": true,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "THE VERGE",
+    "title": "The vibe-coding revolution is coming to all the gadgets",
+    "subtitle": "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on the vibe-hacking of everything, follow David Pierce. The Stepback arrives in our subscribers' inboxes on Sunday at 8AM ET. Opt in for The Stepback here. How it started Like so many things with AI, it's not […]",
+    "sourceName": "The Verge · AI & Cyberculture",
+    "sourceDate": "2026-11-20T16:30",
+    "sourceUrl": "https://www.theverge.com/column/1039139/vibe-coding-gadgets-tv-camera",
+    "readTime": "3 min",
+    "editorial": [
+      "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on the vibe-hacking of everything, follow David Pierce. The Stepback arrives in our subscribers' inboxes on Sunday at 8AM ET. Opt in for The Stepback here. How it started Like so many things with AI, it's not […]",
+      "In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su The Verge · AI & Cyberculture."
+    ]
+  },
+  {
+    "id": "live-1363682884370856094",
+    "isLiveFeed": true,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "THE VERGE",
+    "title": "The UN fails to agree on rules regulating ‘killer robots’",
+    "subtitle": "One of the items on the agenda for UN diplomats meeting in Geneva this week was working towards rules regarding the use of autonomous weapons, or so-called \"killer robots.\" Eventually, representatives left the meetings agreeing to \"start discussing options\" after a largely fruitless week of negotiations. According to NPR: Before the negotiations got underway...",
+    "sourceName": "The Verge · AI & Cyberculture",
+    "sourceDate": "2026-11-21T15:03",
+    "sourceUrl": "https://www.theverge.com/tech/1039554/un-regulations-killer-robots",
+    "readTime": "3 min",
+    "editorial": [
+      "One of the items on the agenda for UN diplomats meeting in Geneva this week was working towards rules regarding the use of autonomous weapons, or so-called \"killer robots.\" Eventually, representatives left the meetings agreeing to \"start discussing options\" after a largely fruitless week of negotiations. According to NPR: Before the negotiations got underway...",
+      "In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su The Verge · AI & Cyberculture."
+    ]
+  },
+  {
+    "id": "live-4614431001386742481",
+    "isLiveFeed": true,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "THE VERGE",
+    "title": "Can Anthropic afford to put safety first?",
+    "subtitle": "Today, I’m talking with Hayden Field, The Verge’s senior AI reporter, about the Anthropic IPO for the third and final episode in our series about AI in real life. The AI lab behind Claude went public on the Nasdaq last Thursday. The numbers are gigantic, but not really that important for this conversation, except to […]",
+    "sourceName": "The Verge · AI & Cyberculture",
+    "sourceDate": "2026-11-21T08:29",
+    "sourceUrl": "https://www.theverge.com/podcast/1038701/anthropic-ipo-ai-safety-openai-nvidia-structure",
+    "readTime": "3 min",
+    "editorial": [
+      "Today, I’m talking with Hayden Field, The Verge’s senior AI reporter, about the Anthropic IPO for the third and final episode in our series about AI in real life. The AI lab behind Claude went public on the Nasdaq last Thursday. The numbers are gigantic, but not really that important for this conversation, except to […]",
+      "In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su The Verge · AI & Cyberculture."
+    ]
+  },
+  {
+    "id": "live-765238810711092564",
+    "isLiveFeed": true,
+    "category": "NOVITÀ & AGI 18+",
+    "badge": "THE VERGE",
+    "title": "Chess.com’s next move is a new hub for classic games, from mahjong to sudoku",
+    "subtitle": "Chess.com is ready to go a lot bigger than chess. After launching Gambit, a gambling-free poker site, earlier this year, the company is now adding 10 more games: backgammon, checkers, go, hearts, mahjong, shogi, sudoku, solitaire, xiangqi, and a Scrabble alternative called word. They're all part of Chess's new Classic Games platform, which is launching […]",
+    "sourceName": "The Verge · AI & Cyberculture",
+    "sourceDate": "2026-11-19T18:04",
+    "sourceUrl": "https://www.theverge.com/games/1038099/chess-classic-games-expansion-ai",
+    "readTime": "3 min",
+    "editorial": [
+      "Chess.com is ready to go a lot bigger than chess. After launching Gambit, a gambling-free poker site, earlier this year, the company is now adding 10 more games: backgammon, checkers, go, hearts, mahjong, shogi, sudoku, solitaire, xiangqi, and a Scrabble alternative called word. They're all part of Chess's new Classic Games platform, which is launching […]",
+      "In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su The Verge · AI & Cyberculture."
     ]
   }
 ]

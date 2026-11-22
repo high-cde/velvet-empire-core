@@ -52,7 +52,7 @@
     '<a href="https://velvet.x-zdos.it/hub/" style="color:#f3ebf2;font-size:11px;text-decoration:underline;">Indice AI/Velvet →</a>',
     '</div>',
     '<div style="display:grid;gap:7px;">',
-    '<a href="https://velvet.x-zdos.it/magazine/" style="color:#d7b46a;text-decoration:none;font-weight:800;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.05);">📰 Our Velvet Magazine 18+ (15+ Riviste)</a>',
+    '<a href="https://velvet.x-zdos.it/magazine/" style="color:#d7b46a;text-decoration:none;font-weight:800;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.05);">📰 Our Velvet Magazine 18+ (25+ Riviste & Novità)</a>',
     '<a href="https://velvet.x-zdos.it/zara/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">💋 Zara AGI Console (18+)</a>',
     '<a href="https://velvet.x-zdos.it/ai-directory/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🤖 AI Directory ZDOS</a>',
     '<a href="https://velvet.x-zdos.it/ourvelvet" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🪪 Card Utente & Badge</a>',

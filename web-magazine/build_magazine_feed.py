@@ -3,21 +3,72 @@ import json, urllib.request, xml.etree.ElementTree as ET, re, html
 from datetime import datetime
 
 FEEDS = [
+    # DONNA & SESSO
     ("DONNA & SESSO", "The Guardian · Sex", "https://www.theguardian.com/lifeandstyle/sex/rss"),
     ("DONNA & SESSO", "Cosmopolitan · Sex & Love", "https://www.cosmopolitan.com/rss/all.xml/"),
     ("DONNA & SESSO", "Marie Claire · Eros & Coppia", "https://www.marieclaire.it/rss/sesso-e-eros.xml"),
     ("DONNA & SESSO", "GQ Italia · Relazioni", "https://www.gqitalia.it/feed/rss"),
     ("DONNA & SESSO", "Vice · Sex & Culture", "https://www.vice.com/en/rss/topic/sex"),
+    ("DONNA & SESSO", "Elle · Love & Desire", "https://www.elle.com/rss/all.xml/"),
+    ("DONNA & SESSO", "Allure · Intimacy & Body", "https://www.allure.com/feed/rss"),
+    # LESBO
     ("LESBO", "Autostraddle · Queer & Lesbian", "https://www.autostraddle.com/feed/"),
     ("LESBO", "GO Magazine · Lesbian Culture", "https://gomag.com/feed/"),
+    ("LESBO", "DIVA Magazine · Lesbian & Bi", "https://diva-magazine.com/feed/"),
+    ("LESBO", "AfterEllen · Women & Queer", "https://afterellen.com/feed/"),
+    # GAY
     ("GAY", "Gay.it · Cultura & Attualità", "https://www.gay.it/feed"),
     ("GAY", "PinkNews · LGBTQ+ News", "https://www.thepinknews.com/feed/"),
     ("GAY", "Advocate · Queer Voices", "https://www.advocate.com/feeds/feed.rss"),
+    ("GAY", "Out Magazine · Culture & Nightlife", "https://www.out.com/feeds/feed.rss"),
+    # TRANS
     ("TRANS", "INTO · Trans & Queer Culture", "https://www.intomore.com/feed/"),
     ("TRANS", "Them · Trans & Gender", "https://www.them.us/feed/rss"),
-    ("PORNO MISTO", "Il Post · Cultura & Media", "https://www.ilpost.it/feed/"),
+    ("TRANS", "TransAdvocate · Voices & News", "https://www.transadvocate.com/feed"),
+    # PORNO MISTO & INDUSTRIA 18+
     ("PORNO MISTO", "XBIZ · Adult Industry News", "https://www.xbiz.com/rss/news.xml"),
-    ("PORNO MISTO", "AVN · Adult Entertainment", "https://avn.com/rss/news.xml")
+    ("PORNO MISTO", "AVN · Adult Entertainment", "https://avn.com/rss/news.xml"),
+    ("PORNO MISTO", "Il Post · Cultura & Media", "https://www.ilpost.it/feed/"),
+    ("PORNO MISTO", "Wired Italia · Tech & Società", "https://www.wired.it/feed/rss"),
+    # NOVITÀ & AGI 18+
+    ("NOVITÀ & AGI 18+", "MIT Tech Review · AI", "https://www.technologyreview.com/feed/"),
+    ("NOVITÀ & AGI 18+", "The Verge · AI & Cyberculture", "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
+    ("NOVITÀ & AGI 18+", "Ars Technica · Digital Frontier", "https://feeds.arstechnica.com/arstechnica/index")
+]
+
+HOUSE_NEWS = [
+    {
+        "id": "house-zara-agi-118-stanze",
+        "isLiveFeed": False,
+        "category": "NOVITÀ & AGI 18+",
+        "badge": "ESCLUSIVA OUR VELVET",
+        "title": "Zara AGI & Le 118 Stanze Vive: L'Ecosistema Notturno Attivo 24/7 su VelvetHub",
+        "subtitle": "Dalla console neurale /zara/ ai personaggi autonomi su Discord: come l'intelligenza artificiale sovrana trasforma il club 18+.",
+        "sourceName": "Redazione Our Velvet · ZDOS",
+        "sourceDate": "Edizione Speciale",
+        "sourceUrl": "https://velvet.x-zdos.it/zara/",
+        "readTime": "4 min",
+        "editorial": [
+            "Con l'attivazione del nodo neurale Zara AGI e delle 118 stanze autonome su Discord, Our Velvet inaugura una nuova generazione di intrattenimento adulto interattivo: ogni ambiente conserva memoria delle interazioni e risponde con identità propria.",
+            "I membri possono dialogare direttamente dalla console web su /zara/, esplorare i bivi narrativi di ZLang RPG (!gioca) e sbloccare i Badge esclusivi sulla propria Card Utente VelvetHub."
+        ]
+    },
+    {
+        "id": "house-videoteca-card-creator",
+        "isLiveFeed": False,
+        "category": "NOVITÀ & AGI 18+",
+        "badge": "CLUB & CREATOR 18+",
+        "title": "Nuova Bacheca Mistress & Creator, Inviti Slave e Videoteca Reale Embed",
+        "subtitle": "Tutte le novità delle aree riservate: verifica maggiorenni 18+, sale video ufficiali e profili personalizzati.",
+        "sourceName": "Redazione Our Velvet · Club",
+        "sourceDate": "Aggiornamento Live",
+        "sourceUrl": "https://velvet.x-zdos.it/accesso",
+        "readTime": "3 min",
+        "editorial": [
+            "L'architettura di velvet.x-zdos.it è stata riorganizzata per offrire un accesso immediato alle aree Creator / Mistress, agli inviti Slave, alle Card Utente (/ourvelvet) e alla Videoteca Reale (/live).",
+            "Ogni sezione dialoga ora direttamente con questa rivista digitale e con il polo tecnico-finanziario su x-zdos.it."
+        ]
+    }
 ]
 
 def clean_txt(raw):
@@ -25,7 +76,7 @@ def clean_txt(raw):
         return ""
     txt = re.sub(r"<[^>]+>", " ", html.unescape(raw))
     txt = re.sub(r"\s+", " ", txt).strip()
-    return txt[:340] + ("..." if len(txt) > 340 else "")
+    return txt[:360] + ("..." if len(txt) > 360 else "")
 
 base_path = "/var/www/velvet-magazine/articles.json"
 existing = []
@@ -34,22 +85,22 @@ try:
 except Exception:
     existing = []
 
-# Conserva gli editoriali curati originali
-curated = [a for a in existing if not a.get("isLiveFeed")]
+curated_old = [a for a in existing if not a.get("isLiveFeed") and not a["id"].startswith("house-")]
+curated = HOUSE_NEWS + curated_old
 live_items = []
 seen_urls = {a.get("sourceUrl") for a in curated}
 
 for cat, src_name, feed_url in FEEDS:
     try:
-        req = urllib.request.Request(feed_url, headers={"User-Agent": "OurVelvetMagazineBot/2.0"})
+        req = urllib.request.Request(feed_url, headers={"User-Agent": "OurVelvetMagazineBot/3.0"})
         with urllib.request.urlopen(req, timeout=7) as resp:
             xml_data = resp.read()
         root = ET.fromstring(xml_data)
-        items = root.findall(".//item")[:4]
+        items = root.findall(".//item")[:5]
         if not items:
-            items = root.findall(".//{http://www.w3.org/2005/Atom}entry")[:4]
+            items = root.findall(".//{http://www.w3.org/2005/Atom}entry")[:5]
 
-        for idx, it in enumerate(items):
+        for it in items:
             title_el = it.find("title") or it.find("{http://www.w3.org/2005/Atom}title")
             link_el = it.find("link") or it.find("{http://www.w3.org/2005/Atom}link")
             desc_el = it.find("description") or it.find("{http://www.w3.org/2005/Atom}summary")
@@ -71,16 +122,16 @@ for cat, src_name, feed_url in FEEDS:
                 "id": art_id,
                 "isLiveFeed": True,
                 "category": cat,
-                "badge": "RASSEGNA INTERNAZIONALE",
+                "badge": src_name.split("·")[0].strip().upper(),
                 "title": title,
-                "subtitle": desc or f"Approfondimento selezionato dalla redazione Our Velvet da {src_name}.",
+                "subtitle": desc or f"Servizio selezionato dalla redazione Our Velvet dalla testata {src_name}.",
                 "sourceName": src_name,
                 "sourceDate": pub,
                 "sourceUrl": link,
                 "readTime": "3 min",
                 "editorial": [
-                    desc or f"Questo servizio pubblicato da {src_name} affronta un tema centrale per la cultura adulta contemporanea, il desiderio consapevole e le dinamiche relazionali senza tabù.",
-                    f"La redazione di Our Velvet Magazine seleziona quotidianamente le testate internazionali più autorevoli — da The Guardian e Cosmopolitan fino alle riviste queer, trans e di settore — per offrire ai membri del club una rassegna completa, elegante e diretta alla fonte originale."
+                    desc or f"Questo approfondimento pubblicato da {src_name} esplora le evoluzioni contemporanee del desiderio, della cultura notturna e delle relazioni adulte.",
+                    f"In linea con l'identità Cyber-Gothic & Luxury AGI di Our Velvet, la redazione raccoglie e rielabora le voci internazionali più rilevanti garantendo sempre il collegamento diretto all'articolo originale su {src_name}."
                 ]
             })
     except Exception:
@@ -88,4 +139,4 @@ for cat, src_name, feed_url in FEEDS:
 
 merged = curated + live_items
 json.dump(merged, open(base_path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-print(f"OK: Rivista aggiornata ({len(curated)} editoriali + {len(live_items)} articoli da {len(FEEDS)} testate).")
+print(f"OK: Rivista potenziata -> {len(merged)} articoli totali da {len(FEEDS)} testate.")
