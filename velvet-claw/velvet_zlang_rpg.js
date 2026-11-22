@@ -206,7 +206,7 @@ client.on("messageCreate", async message => {
   }
 
 
-  if (cmd === "!mining" || cmd === "!unmineable" || cmd === "!miners") {
+  if (cmd === "!mining" || cmd === "!unmineable" || cmd === "!miners" || cmd === "!vault" || cmd === "!ourvault") {
     const mLines = [
       "Mina con CPU (`RandomX`) o GPU (`KawPow`, `Etchash`, `Autolykos2`, `kHeavyHash`) su **unMineable** e converti i payout in **`$OV`** e **`$DSN`**.",
       "",
@@ -219,12 +219,12 @@ client.on("messageCreate", async message => {
       "```text",
       "SOL:6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD.VELVET_NODE#velvet-empire",
       "```",
-      "🌐 **Generatore Interattivo Web:** https://velvet.x-zdos.it/mining/",
+      "🌐 **Generatore Interattivo Web:** https://velvet.x-zdos.it/our-vault/",
       "🔄 **Auto-Swap $OV / $DSN:** https://swap.x-zdos.it"
     ];
     const mEmbed = new EmbedBuilder()
       .setColor(0x00F0FF)
-      .setTitle("⛏️ OUR VELVET // ZDOS MULTI-TOKEN MINING (UNMINEABLE)")
+      .setTitle("🏦 $OV — OUR VAULT // MULTI-TOKEN MINING & TREASURY")
       .setDescription(mLines.join("\n"))
       .setFooter({ text: "Usa !verifica <tx_hash> dopo il payout per sbloccare i ranghi VIP" });
     await message.reply({ embeds: [mEmbed] });
