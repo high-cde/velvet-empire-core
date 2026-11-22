@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZDOS // SOVEREIGN FORGE — Solana Launchpad & Crypto Tools (SFW)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #04070e; --cyan: #00f0ff; --sol: #14f195; --purp: #9945ff;
+      --gold: #d7b46a; --txt: #eef4fb; --muted: #9eb0c7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background:
+        radial-gradient(circle at 18% 8%, rgba(0, 240, 255, 0.16), transparent 42%),
+        radial-gradient(circle at 84% 14%, rgba(153, 69, 255, 0.16), transparent 45%),
+        #04070e;
+      color: var(--txt); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; overflow-x: hidden;
+    }
+    canvas#gpuField { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.42; will-change: transform; }
+    .wrap { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 16px 14px 60px; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .cinzel { font-family: 'Cinzel', Georgia, serif; }
+    header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 18px;
+      background: rgba(8, 13, 24, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(0, 240, 255, 0.28);
+    }
+    .nav-btns { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      padding: 7px 13px; border-radius: 999px; font-size: 11px; font-weight: 800;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.14); color: #fff;
+      background: rgba(255,255,255,0.04); cursor: pointer;
+    }
+    .pill-sol { background: linear-gradient(90deg, var(--purp), var(--sol)); color: #04070e; border: none; }
+    .pill-gold { background: rgba(215, 180, 106, 0.18); border-color: var(--gold); color: var(--gold); }
+    .hero { text-align: center; padding: 26px 12px 18px; }
+    .hero h1 { font-size: clamp(26px, 4.8vw, 44px); letter-spacing: 0.8px; margin-top: 8px; }
+    .hero h1 span { color: var(--cyan); }
+    .hero p { max-width: 720px; margin: 10px auto 0; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+    .grid-2, .tools-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    @media (max-width: 840px) { .grid-2, .tools-row { grid-template-columns: 1fr; } }
+    .panel {
+      background: rgba(9, 15, 28, 0.9); backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 240, 255, 0.24); border-radius: 20px; padding: 20px; contain: content;
+    }
+    .panel-oracle {
+      background: linear-gradient(160deg, rgba(24, 14, 42, 0.92), rgba(9, 14, 26, 0.95));
+      border: 1px solid rgba(215, 180, 106, 0.45); border-radius: 20px; padding: 20px; contain: content;
+    }
+    .inp {
+      width: 100%; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 12px; margin-bottom: 8px;
+    }
+    .inp:focus { outline: none; border-color: var(--cyan); }
+    pre.code-box {
+      background: #03050a; border: 1px solid rgba(0, 240, 255, 0.22);
+      border-radius: 12px; padding: 12px; font-size: 11px; color: var(--sol);
+      overflow-x: auto; line-height: 1.5; margin-top: 8px;
+    }
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+    .t-card {
+      background: rgba(10, 16, 30, 0.92); border: 1px solid rgba(0, 240, 255, 0.22);
+      border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.18s, border-color 0.18s; will-change: transform;
+    }
+    .t-card:hover { transform: translateY(-3px); border-color: var(--sol); }
+    .bar-bg { height: 7px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; margin: 9px 0; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--purp), var(--cyan), var(--sol)); }
+    .prophecy-box {
+      margin-top: 10px; padding: 11px; border-radius: 12px;
+      background: rgba(215, 180, 106, 0.12); border-left: 3px solid var(--gold);
+      font-size: 12px; line-height: 1.55; color: #f6ebd2;
+    }
+  </style>
+</head>
+<body>
+<canvas id="gpuField"></canvas>
+<div class="wrap">
+  <header>
+    <div>
+      <strong class="cinzel" style="font-size:16px;letter-spacing:1.4px;">⚡ ZDOS // SOVEREIGN FORGE</strong>
+      <span class="mono" style="display:block;font-size:9.5px;color:var(--sol);">SOLANA LAUNCHPAD & CRYPTO TOOLS • 100% SFW</span>
+    </div>
+    <div class="nav-btns">
+      <a href="https://x-zdos.it/" class="pill">Home ZDOS</a>
+      <a href="https://x-zdos.it/hub/" class="pill">Hub Crypto</a>
+      <a href="https://x-zdos.it/our-vault/" class="pill">Our Vault (Mining)</a>
+      <a href="https://swap.x-zdos.it/?ref=6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" target="_blank" class="pill pill-sol">ZSwap DEX ↗</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <span class="mono" style="color:var(--cyan);font-size:10.5px;letter-spacing:2px;">SOLANA SPL & TOKEN-2022 • ARCHITETTURA SOVRANA ZDOS</span>
+    <h1 class="cinzel">Suite Crypto & Launchpad <span>ZDOS</span></h1>
+    <p>Crea token Solana con curve programmabili in <strong>ZLang</strong>, simula la liquidità prima del deploy, genera hook di distribuzione per il <strong>Miner Umano</strong> e consulta l'Oracolo Strategico Grok.</p>
+  </section>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2 class="cinzel" style="font-size:17px;color:var(--sol);margin-bottom:6px;">🚀 Forgia Token Solana (Bonding Curve)</h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Registra e lancia un nuovo asset nel registro sovrano ZDOS collegato a ZSwap e Proof-of-Merit.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <input class="inp" id="fName" placeholder="Nome Token (es. ZDOS Compute)" oninput="updateZlangSnippet()" />
+        <input class="inp mono" id="fTicker" placeholder="Ticker (es. $ZCP)" oninput="updateZlangSnippet()" />
+      </div>
+      <input class="inp mono" id="fCa" placeholder="Mint Address Solana (opzionale, auto-generato se vuoto)" />
+      <input class="inp" id="fPower" placeholder="Utility On-Chain (es. Staking Fee Split + Proof-of-Merit)" />
+      <textarea class="inp" id="fDesc" rows="2" placeholder="Descrizione tecnica del progetto..."></textarea>
+      <button class="pill pill-sol" style="width:100%;padding:11px;font-size:12px;" onclick="forgeNewToken()">⚡ FORGIA TOKEN NELLA RETE ZDOS</button>
+    </div>
+
+    <div class="panel-oracle">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <h2 class="cinzel" style="font-size:17px;color:var(--gold);">✦ ZDOS Oracle — Solo Donne</h2>
+        <span class="mono" style="font-size:9.5px;color:var(--cyan);border:1px solid var(--cyan);padding:2px 8px;border-radius:999px;">GROK CORE · SFW</span>
+      </div>
+      <p style="font-size:12px;color:#d6d0e6;margin-bottom:12px;">Spazio riservato all'intuizione femminile, alla leadership e alla visione creativa: genera un sigillo profetico Grok per i tuoi progetti.</p>
+      <input class="inp" id="mName" placeholder="Il tuo Nome / Archetipo" />
+      <textarea class="inp" id="mIntention" rows="2" placeholder="Scrivi la tua visione, progetto o domanda..."></textarea>
+      <button class="pill pill-gold" style="width:100%;padding:11px;font-size:12px;" onclick="invokeGrokOracle()">✦ GENERA SIGILLO GROK ORACLE</button>
+      <div id="oracleOutput"></div>
+    </div>
+  </div>
+
+  <div class="tools-row">
+    <div class="panel">
+      <h3 class="cinzel" style="font-size:15px;color:var(--cyan);">📊 Simulatore Bonding Curve Solana</h3>
+      <p style="font-size:11.5px;color:var(--muted);margin:5px 0 10px;">Calcola in tempo reale supply circolante, market cap stimato e soglia migrazione su ZSwap DEX.</p>
+      <label class="mono" style="font-size:11px;color:var(--sol);">SOL Raccolti nella Curva: <strong id="solVal">24</strong> SOL</label>
+      <input type="range" min="1" max="85" value="24" style="width:100%;margin:8px 0;" oninput="calcCurve(this.value)" />
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;text-align:center;" class="mono">
+        <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px;"><div style="font-size:9px;color:var(--muted);">PROGRESSO</div><strong style="color:var(--sol);font-size:13px;" id="cPct">28.2%</strong></div>
+        <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px;"><div style="font-size:9px;color:var(--muted);">MCAP STIMATO</div><strong style="color:var(--cyan);font-size:13px;" id="cMcap">$18,400</strong></div>
+        <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px;"><div style="font-size:9px;color:var(--muted);">STATO DEX</div><strong style="color:var(--gold);font-size:12px;" id="cDex">BONDING</strong></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h3 class="cinzel" style="font-size:15px;color:var(--cyan);">⚡ Generatore Contratto ZLang (ZLB2)</h3>
+        <button class="pill" style="padding:4px 10px;font-size:10px;" onclick="navigator.clipboard.writeText(document.getElementById('zlangCode').textContent);alert('Codice ZLang copiato!')">Copia ZLang</button>
+      </div>
+      <pre class="code-box mono" id="zlangCode"></pre>
+    </div>
+  </div>
+
+  <h3 class="cinzel" style="font-size:17px;color:var(--cyan);margin-top:24px;">🔥 Asset Attivi su ZDOS Sovereign Forge</h3>
+  <div class="tokens-grid" id="tokensGrid"></div>
+</div>
+
+<script>
+(function initGpuField() {
+  const c = document.getElementById("gpuField"), ctx = c.getContext("2d");
+  let w, h, t = 0;
+  function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+  window.addEventListener("resize", resize); resize();
+  function draw() {
+    t += 0.01; ctx.clearRect(0, 0, w, h);
+    const g1 = ctx.createRadialGradient(w * (0.5 + 0.2 * Math.sin(t)), h * 0.25, 10, w * 0.5, h * 0.25, w * 0.48);
+    g1.addColorStop(0, "rgba(0, 240, 255, 0.2)"); g1.addColorStop(1, "transparent");
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, w, h);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+function calcCurve(sol) {
+  const s = parseFloat(sol); document.getElementById("solVal").textContent = s;
+  const pct = Math.min(100, ((s / 85) * 100)).toFixed(1);
+  const mcap = Math.round(4800 + Math.pow(s, 1.48) * 125);
+  document.getElementById("cPct").textContent = pct + "%";
+  document.getElementById("cMcap").textContent = "$" + mcap.toLocaleString();
+  document.getElementById("cDex").textContent = s >= 85 ? "ZSWAP LIVE" : "BONDING";
+}
+calcCurve(24);
+
+function updateZlangSnippet() {
+  const n = (document.getElementById("fName").value.trim() || "ZDOS Compute");
+  const t = (document.getElementById("fTicker").value.trim().toUpperCase() || "$ZCP").replace(/^\$/, "");
+  document.getElementById("zlangCode").textContent = `// ZLang Sovereign Token Hook (VM ZLB2)\n@solana_spl(name="${n}", symbol="${t}", decimals=9)\nhook on_swap(amount, signer) {\n  route_merit_pool(amount * 0.02, "$DSN_TREASURY");\n  emit telemetry("ZDOS_FORGE_SWAP", signer, amount);\n}`;
+}
+updateZlangSnippet();
+
+async function loadForge() {
+  const res = await fetch("/api/forge/state");
+  const data = await res.json();
+  document.getElementById("tokensGrid").innerHTML = (data.tokens || []).map(tk => `
+    <div class="t-card">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong class="mono" style="font-size:16px;color:var(--sol);">${tk.ticker}</strong>
+          <span class="mono" style="font-size:10px;color:var(--cyan);">CURVA: ${tk.curvePct}%</span>
+        </div>
+        <h4 style="font-size:15px;margin-top:4px;">${tk.name}</h4>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">${tk.desc}</p>
+        <div class="bar-bg"><div class="bar-fill" style="width:${tk.curvePct}%;"></div></div>
+        <p class="mono" style="font-size:10px;color:var(--gold);">⚡ ${tk.power}</p>
+        <p class="mono" style="font-size:9.5px;color:#8fa3b8;margin-top:6px;word-break:break-all;">CA: ${tk.ca}</p>
+      </div>
+      <div style="display:flex;gap:7px;margin-top:12px;">
+        <a href="https://swap.x-zdos.it/?ref=6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" target="_blank" class="pill pill-sol" style="flex:1;text-align:center;">Swappa ↗</a>
+        <button class="pill" onclick="navigator.clipboard.writeText('${tk.ca}');alert('CA copiato: ${tk.ca}')">Copia CA</button>
+      </div>
+    </div>
+  `).join("");
+  if (data.oracles && data.oracles.length > 0 && !document.getElementById("oracleOutput").innerHTML) {
+    document.getElementById("oracleOutput").innerHTML = `<div class="prophecy-box">${data.oracles[0].prophecy}</div>`;
+  }
+}
+
+async function forgeNewToken() {
+  const name = document.getElementById("fName").value.trim();
+  const ticker = document.getElementById("fTicker").value.trim();
+  const ca = document.getElementById("fCa").value.trim();
+  const power = document.getElementById("fPower").value.trim();
+  const desc = document.getElementById("fDesc").value.trim();
+  if (!name || !ticker) return alert("Inserisci almeno Nome e Ticker del token.");
+  const res = await fetch("/api/forge/forge-token", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, ticker, ca, power, desc })
+  });
+  const d = await res.json();
+  if (d.ok) {
+    ["fName","fTicker","fCa","fPower","fDesc"].forEach(id => document.getElementById(id).value = "");
+    loadForge();
+  }
+}
+
+async function invokeGrokOracle() {
+  const name = document.getElementById("mName").value.trim() || "Costruttrice Sovrana";
+  const intention = document.getElementById("mIntention").value.trim() || "Chiarezza, creatività e leadership";
+  document.getElementById("oracleOutput").innerHTML = `<div class="prophecy-box">✦ Connessione al nucleo Grok Oracle in corso...</div>`;
+  const res = await fetch("/api/forge/mystic-oracle", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, intention })
+  });
+  const d = await res.json();
+  if (d.ok) document.getElementById("oracleOutput").innerHTML = `<div class="prophecy-box">${d.prophecy}</div>`;
+}
+loadForge();
+</script>
+</body>
+</html>

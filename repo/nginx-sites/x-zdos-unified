@@ -1,0 +1,188 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name x-zdos.it www.x-zdos.it;
+    return 301 https://x-zdos.it$request_uri;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.x-zdos.it;
+    ssl_certificate     /etc/letsencrypt/live/x-zdos.it/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/x-zdos.it/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    return 301 https://x-zdos.it$request_uri;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name x-zdos.it;
+
+    ssl_certificate     /etc/letsencrypt/live/x-zdos.it/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/x-zdos.it/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    root /var/www/x-zdos-portal/current;
+    index index.html;
+    server_tokens off;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Strict-Transport-Security "max-age=15552000" always;
+
+    # DSN-X dx9: cache lunga per asset statici della home (versionati con ?v=)
+    location ^~ /assets/fonts/ {
+        types { font/woff2 woff2; text/css css; }
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        add_header Access-Control-Allow-Origin "*" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Strict-Transport-Security "max-age=15552000" always;
+        try_files $uri =404;
+    }
+    location ^~ /assets/ {
+        add_header Cache-Control "public, max-age=2592000" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Strict-Transport-Security "max-age=15552000" always;
+        try_files $uri =404;
+    }
+    location = /favicon.ico { expires 30d; access_log off; try_files $uri =404; }
+    location ~* ^/(nav\.js|sessions\.css)$ {
+        add_header Cache-Control "public, max-age=86400" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        try_files $uri =404;
+    }
+
+    # Zlang IDE (statico)
+    location = /ide { return 301 /ide/; }
+    location ^~ /ide/ {
+        alias /var/www/zlang-ide/current/;
+        index index.html;
+        types { text/html html; text/css css; application/javascript js; application/wasm wasm; image/svg+xml svg; }
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Cache-Control "no-cache" always;
+    }
+
+    # Bot Discord z-xSOLANA: pagina di verifica holder (statica) e API locale (servizio zdiscord)
+    location = /discord/verify { return 301 /discord/verify/; }
+    location ^~ /discord/verify/ {
+        alias /var/www/zdiscord/verify/;
+        index index.html;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "no-referrer" always;
+        add_header X-Frame-Options "DENY" always;
+        add_header Cache-Control "no-cache" always;
+    }
+    location ^~ /discord/api/ {
+        proxy_pass http://127.0.0.1:8790;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        client_max_body_size 8k;
+        proxy_read_timeout 30s;
+    }
+
+    # xCLOUD by ZDOS - gestionale MVP (statico, dati solo nel browser)
+    location = /xcloud { return 301 /xcloud/; }
+    location ^~ /xcloud/ {
+        alias /var/www/xcloud/current/;
+        index index.html;
+        types { text/html html; text/css css; application/javascript js; image/svg+xml svg; application/manifest+json webmanifest; }
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Permissions-Policy "geolocation=(self), camera=(), microphone=()" always;
+        add_header Cache-Control "no-cache" always;
+    }
+
+    # ZDESK reverse proxy (attivo su 127.0.0.1:8787)
+    # DSN-X market-ready: redirect per link storici
+    location = /zroute { return 301 https://swap.x-zdos.it/zroute/; }
+    location ^~ /zroute/ { return 301 https://swap.x-zdos.it/zroute/; }
+    location = /dsn { return 301 https://x-zdos.it/#token; }
+    location = /dsn/ { return 301 https://x-zdos.it/#token; }
+    location = /zdesk { return 301 /zdesk/; }
+    location /zdesk/ {
+        auth_basic "ZDESK";
+        auth_basic_user_file /etc/nginx/zdesk.htpasswd;
+        proxy_pass http://127.0.0.1:8787/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Prefix /zdesk;
+        proxy_read_timeout 120s;
+    }
+
+    include /etc/nginx/snippets/zdos-agency.conf;
+
+    # Portale sviluppatori Zlang (statico)
+    include /etc/nginx/snippets/xzdos-merito.conf;
+    location = /dev { return 301 /dev/; }
+    location ^~ /dev/ {
+        alias /var/www/zlang-dev/current/;
+        index index.html;
+        types { text/html html; text/css css; application/javascript js; image/svg+xml svg; }
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Strict-Transport-Security "max-age=15552000" always;
+        add_header Cache-Control "no-cache" always;
+    }
+
+    location ^~ /zdos-assets/ {
+        alias /var/www/zdos-portal/;
+    }
+
+    location = /hub { return 301 /hub/; }
+    location ^~ /hub/ {
+        alias /var/www/zdos-portal/;
+        index index.html;
+        try_files $uri $uri/ /hub/index.html;
+    }
+
+    location = /fomo { return 301 /fomo/; }
+    location ^~ /fomo/ {
+        alias /var/www/zdos-portal/;
+        index fomo.html;
+        try_files /fomo.html =404;
+    }
+
+    location = /our-vault { return 301 /our-vault/; }
+    location = /mining { return 301 /our-vault/; }
+    location ^~ /our-vault/ {
+        alias /var/www/zdos-portal/;
+        index vault.html;
+        try_files /vault.html =404;
+    }
+
+    location = /zlang { return 301 /zlang/linguaggio/; }
+    location ^~ /zlang/ {
+        alias /var/www/zlang-dev/releases/20261121-165144-znft/;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+
+    location = /forge { return 301 /forge/; }
+    location ^~ /forge/ {
+        alias /var/www/zdos-portal/;
+        index forge.html;
+        try_files /forge.html =404;
+    }
+
+    location ^~ /api/forge/ {
+        proxy_pass http://127.0.0.1:8833/;
+        proxy_set_header Host $host;
+    }
+
+    location / {
+        proxy_set_header Accept-Encoding "";
+        sub_filter "</body>" "<script src=\"/zdos-assets/zdos-dock.js\" defer></script></body>";
+        sub_filter_once on;
+        try_files $uri $uri/ =404;
+    }
+}
