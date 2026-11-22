@@ -190,6 +190,7 @@ client.on("messageCreate", async message => {
       "• **`!listino`** — Visualizza i pacchetti VIP, stanze private e tributi on-chain.",
       "• **`!verifica <tx_hash>`** — Verifica istantaneamente una transazione Solana Mainnet e sblocca il grado.",
       "• **`!cassa`** — Controlla lo stato della Treasury (`6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD`).",
+      "• **`!mining`** — Generatore multi-token unMineable (55+ coin) con auto-swap `$OV` / `$DSN`.",
       "",
       "**🌐 PORTALI & NODI AGI CONNESSI**",
       "• **Terminale Zara AGI:** https://velvet.x-zdos.it/zara/",
@@ -202,6 +203,31 @@ client.on("messageCreate", async message => {
       .setDescription(descLines.join("\n"))
       .setFooter({ text: "ZDOS Sovereign Network • Digita !gioca per iniziare subito" });
     await message.reply({ embeds: [helpEmbed] });
+  }
+
+
+  if (cmd === "!mining" || cmd === "!unmineable" || cmd === "!miners") {
+    const mLines = [
+      "Mina con CPU (`RandomX`) o GPU (`KawPow`, `Etchash`, `Autolykos2`, `kHeavyHash`) su **unMineable** e converti i payout in **`$OV`** e **`$DSN`**.",
+      "",
+      "**🪙 Token Supportati (55+ Asset Multi-Chain):**",
+      "• **Solana SPL:** `SOL`, `USDT`, `USDC`, `JUP`, `RAY`, `BONK`, `WIF`, `PYTH`, `RENDER`",
+      "• **Layer 1 & Privacy:** `BTC`, `ETH`, `BNB`, `TON`, `AVAX`, `KAS`, `XMR`, `RVN`, `ERG`, `LTC`, `SUI`, `APT`, `ADA`, `DOT`, `XRP`",
+      "• **Polygon / L2 / AI:** `POL (MATIC)`, `ARB`, `OP`, `LINK`, `AAVE`, `FET`, `TAO`, `AKT`, `GRT`, `DOGE`, `SHIB`, `PEPE`",
+      "",
+      "**⚡ Stringa Worker Rapida (Payout Treasury Solana):**",
+      "```text",
+      "SOL:6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD.VELVET_NODE#velvet-empire",
+      "```",
+      "🌐 **Generatore Interattivo Web:** https://velvet.x-zdos.it/mining/",
+      "🔄 **Auto-Swap $OV / $DSN:** https://swap.x-zdos.it"
+    ];
+    const mEmbed = new EmbedBuilder()
+      .setColor(0x00F0FF)
+      .setTitle("⛏️ OUR VELVET // ZDOS MULTI-TOKEN MINING (UNMINEABLE)")
+      .setDescription(mLines.join("\n"))
+      .setFooter({ text: "Usa !verifica <tx_hash> dopo il payout per sbloccare i ranghi VIP" });
+    await message.reply({ embeds: [mEmbed] });
   }
 
   if (cmd === "!velvetgame" || cmd === "!gioca" || cmd === "!storia") {

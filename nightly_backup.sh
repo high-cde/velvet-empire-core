@@ -25,6 +25,7 @@ rsync -a --delete \
 
 # Sincronizza anche la console web di Zara e il vhost Nginx
 [ -d /var/www/velvet-zara ] && rsync -a --delete /var/www/velvet-zara/ "$SYNC_DIR/web-zara/"
+[ -d /var/www/velvet-mining ] && rsync -a --delete /var/www/velvet-mining/ "$SYNC_DIR/web-mining/"
 [ -f /etc/nginx/sites-enabled/velvethub ] && cp /etc/nginx/sites-enabled/velvethub "$SYNC_DIR/nginx/velvethub.conf"
 
 cd "$SYNC_DIR"
