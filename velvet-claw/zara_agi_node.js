@@ -1,3 +1,20 @@
+async function callClawSafe(payload, fallbackText) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch("http://127.0.0.1:8799/claw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json();
+      if (d && d.ok && d.reply) return String(d.reply).trim();
+    } catch (_) {
+      await new Promise(res => setTimeout(res, 1500));
+    }
+  }
+  return fallbackText;
+}
+
 const http = require("http");
 const fs = require("fs");
 const { Client, GatewayIntentBits } = require("/root/velvet-daemon/node_modules/discord.js");
@@ -41,19 +58,13 @@ const ZARA_MANIFEST = {
 };
 
 async function askZara(userId, prompt, mode = "roleplay_lounge") {
-  const r = await fetch("http://127.0.0.1:8799/claw", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      prompt,
-      user_id: userId,
-      role: "Zara — Autonomous AI Siren & Velvet City Growth Director (Non-Human AGI)",
-      channel: mode,
-      persona: "zara"
-    })
-  });
-  const d = await r.json();
-  return d.ok ? String(d.reply).trim() : "Segnale neurale Velvet attivo.";
+  return callClawSafe({
+    prompt,
+    user_id: userId,
+    role: "Zara — Autonomous AI Siren & Velvet City Growth Director (Non-Human AGI)",
+    channel: mode,
+    persona: "zara"
+  }, "Segnale neurale Velvet attivo.");
 }
 
 // Endpoint HTTP (8811) per Manifest AGI, Chat diretta e Beacon pubblico

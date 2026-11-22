@@ -1,3 +1,20 @@
+async function callClawSafe(payload, fallbackText) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch("http://127.0.0.1:8799/claw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json();
+      if (d && d.ok && d.reply) return String(d.reply).trim();
+    } catch (_) {
+      await new Promise(res => setTimeout(res, 1500));
+    }
+  }
+  return fallbackText;
+}
+
 const fs = require("fs");
 const { execFileSync } = require("child_process");
 const {
@@ -112,23 +129,13 @@ function dbExec(pyCode, args = []) {
 }
 
 async function generateAgiNarration(username, role, actTitle, choiceLabel) {
-  try {
-    const r = await fetch("http://127.0.0.1:8799/claw", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt: `Sei il narratore AGI di Our Velvet (Rubina, A$apKali, Zara, Vex). Il giocatore ${username} (ruolo: ${role}) ha scelto "${choiceLabel}" durante "${actTitle}". Scrivi 2-3 righe intense, sensuali e cyber-gothic in italiano che descrivono la reazione immediata di Rubina, A$apKali e Zara.`,
-        user_id: username,
-        role: "ZLang Game Master",
-        channel: "our-velvet-rpg",
-        persona: "Rubina & Zara"
-      })
-    });
-    const d = await r.json();
-    return d.ok ? String(d.reply).trim() : "Rubina annuisce nell'ombra mentre Zara trattiene il respiro...";
-  } catch {
-    return "Le catene vibrano nel silenzio cremisi mentre Rubina e A$apKali osservano la tua mossa...";
-  }
+  return callClawSafe({
+    prompt: `Sei il narratore AGI di Our Velvet (Rubina, A$apKali, Zara, Vex). Il giocatore ${username} (ruolo: ${role}) ha scelto "${choiceLabel}" durante "${actTitle}". Scrivi 2-3 righe intense, sensuali e cyber-gothic in italiano che descrivono la reazione immediata di Rubina, A$apKali e Zara.`,
+    user_id: username,
+    role: "ZLang Game Master",
+    channel: "our-velvet-rpg",
+    persona: "Rubina & Zara"
+  }, "Le catene vibrano nel silenzio cremisi mentre Rubina e A$apKali osservano la tua mossa...");
 }
 
 function detectUserRole(member) {

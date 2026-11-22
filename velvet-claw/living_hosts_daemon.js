@@ -1,3 +1,20 @@
+async function callClawSafe(payload, fallbackText) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch("http://127.0.0.1:8799/claw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json();
+      if (d && d.ok && d.reply) return String(d.reply).trim();
+    } catch (_) {
+      await new Promise(res => setTimeout(res, 1500));
+    }
+  }
+  return fallbackText;
+}
+
 const fs = require("fs");
 const { execFileSync } = require("child_process");
 const { Client, GatewayIntentBits } = require("/root/velvet-daemon/node_modules/discord.js");
@@ -72,22 +89,17 @@ async function generateCharacterReply(userId, username, userMsg, state) {
   const welcomeDirective = state.is_first
     ? `AZIONE PRIORITARIA: Accogli ${username} per la prima volta in questa stanza con una presentazione magnetica e coerente col tuo ruolo, poi rispondi al suo messaggio.`
     : `Continua il dialogo con ${username} mantenendo viva la tua personalità.`;
+  const fullPrompt = `${sysPrompt}
+[CONTESTO RETE NEURALE]: ${memoryNote} ${welcomeDirective}
+[MESSAGGIO DI ${username}]: ${userMsg}`;
 
-  const fullPrompt = `${sysPrompt}\n[CONTESTO RETE NEURALE]: ${memoryNote} ${welcomeDirective}\n[MESSAGGIO DI ${username}]: ${userMsg}`;
-
-  const r = await fetch("http://127.0.0.1:8799/claw", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      prompt: fullPrompt,
-      user_id: userId,
-      role: `${personaName} (${roleTitle})`,
-      channel: sector,
-      persona: personaName
-    })
-  });
-  const d = await r.json();
-  return d.ok ? String(d.reply).trim() : null;
+  return callClawSafe({
+    prompt: fullPrompt,
+    user_id: userId,
+    role: `${personaName} (${roleTitle})`,
+    channel: sector,
+    persona: personaName
+  }, null);
 }
 
 const client = new Client({
