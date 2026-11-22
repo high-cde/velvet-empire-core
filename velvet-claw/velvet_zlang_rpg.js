@@ -230,6 +230,27 @@ client.on("messageCreate", async message => {
     await message.reply({ embeds: [mEmbed] });
   }
 
+
+  if (cmd === "!rivista" || cmd === "!magazine" || cmd === "!news18") {
+    const rLines = [
+      "Sfoglia la nuova **Rivista Editoriale 18+ di Our Velvet** con tutte le rubriche rielaborate dalle fonti internazionali:",
+      "",
+      "• **DONNA & SESSO:** https://velvet.x-zdos.it/magazine/?rubrica=DONNA%20%26%20SESSO",
+      "• **LESBO:** https://velvet.x-zdos.it/magazine/?rubrica=LESBO",
+      "• **GAY:** https://velvet.x-zdos.it/magazine/?rubrica=GAY",
+      "• **TRANS:** https://velvet.x-zdos.it/magazine/?rubrica=TRANS",
+      "• **PORNO MISTO & AI 18+:** https://velvet.x-zdos.it/magazine/?rubrica=PORNO%20MISTO",
+      "",
+      "📰 **Copertina Completa:** https://velvet.x-zdos.it/magazine/"
+    ];
+    const rEmbed = new EmbedBuilder()
+      .setColor(0xD7B46A)
+      .setTitle("📰 OUR VELVET MAGAZINE // EDIZIONE EDITORIALE 18+")
+      .setDescription(rLines.join("\n"))
+      .setFooter({ text: "Our Velvet Editorial & Videoteca Reale • Accesso 18+" });
+    await message.reply({ embeds: [rEmbed] });
+  }
+
   if (cmd === "!velvetgame" || cmd === "!gioca" || cmd === "!storia") {
     const role = detectUserRole(message.member);
     dbExec(`

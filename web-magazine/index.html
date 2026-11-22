@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUR VELVET MAGAZINE // Rivista Editoriale 18+</title>
+  <style>
+    :root {
+      --bg: #08050a;
+      --panel: rgba(24, 11, 22, 0.86);
+      --crimson: #c41e3a;
+      --gold: #d7b46a;
+      --gold-light: #f1d58f;
+      --text: #f3ebf2;
+      --muted: #b9aab8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at top center, #2b0916 0%, #08050a 68%);
+      color: var(--text);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      min-height: 100vh;
+    }
+    .sans { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    /* Gate 18+ */
+    #ageGate {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(6, 4, 8, 0.96); backdrop-filter: blur(18px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .gate-box {
+      max-width: 500px; width: 100%; background: var(--panel);
+      border: 1px solid rgba(215, 180, 106, 0.4); border-radius: 24px;
+      padding: 34px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+    }
+    header {
+      border-bottom: 1px solid rgba(215, 180, 106, 0.22);
+      background: rgba(10, 6, 13, 0.85); backdrop-filter: blur(14px);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto; padding: 16px 20px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .brand { font-size: 26px; letter-spacing: 1px; color: #fff; text-decoration: none; }
+    .brand span { color: var(--gold); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-left: 8px; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.14); color: var(--text);
+      transition: 0.2s; cursor: pointer; background: transparent;
+    }
+    .pill:hover, .pill.active { background: var(--gold); color: #09070d; border-color: var(--gold); }
+    .pill-red { background: rgba(196, 30, 58, 0.25); border-color: var(--crimson); }
+    .hero {
+      max-width: 1180px; margin: 0 auto; padding: 42px 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .kicker { color: var(--gold); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 800; }
+    .hero h1 { font-size: clamp(32px, 5vw, 54px); line-height: 1.08; margin-top: 10px; font-weight: 400; }
+    .hero p { color: var(--muted); max-width: 720px; margin-top: 14px; font-size: 15px; line-height: 1.65; }
+    .filters {
+      max-width: 1180px; margin: 22px auto 0; padding: 0 20px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .grid {
+      max-width: 1180px; margin: 26px auto 60px; padding: 0 20px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px;
+    }
+    .card {
+      background: var(--panel); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.22s, border-color 0.22s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: rgba(215, 180, 106, 0.55); }
+    .cat-tag {
+      display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.8px;
+      color: var(--gold-light); background: rgba(196, 30, 58, 0.28);
+      border: 1px solid rgba(196, 30, 58, 0.5); padding: 4px 10px; border-radius: 999px;
+    }
+    .card h2 { font-size: 22px; line-height: 1.28; margin-top: 14px; font-weight: 400; color: #fff; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-top: 10px; }
+    .meta { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #a796a6; }
+    .read-btn {
+      margin-top: 14px; width: 100%; padding: 11px 16px; border-radius: 999px;
+      background: var(--gold); color: #09070d; font-weight: 800; font-size: 12px;
+      border: none; cursor: pointer; text-align: center; text-decoration: none; display: inline-block;
+    }
+    /* Modale Lettura Articolo Completo */
+    #readerModal {
+      position: fixed; inset: 0; z-index: 999; background: rgba(5, 3, 7, 0.92);
+      backdrop-filter: blur(14px); display: none; overflow-y: auto; padding: 28px 16px;
+    }
+    .reader-box {
+      max-width: 760px; margin: 0 auto; background: #130914;
+      border: 1px solid rgba(215, 180, 106, 0.35); border-radius: 24px; padding: 34px;
+    }
+    .reader-box h2 { font-size: 32px; line-height: 1.2; margin: 14px 0; font-weight: 400; }
+    .reader-body p { font-size: 17px; line-height: 1.8; color: #e8dce7; margin-bottom: 18px; }
+    .videoteca-banner {
+      max-width: 1180px; margin: 0 auto 54px; padding: 0 20px;
+    }
+    .v-card {
+      background: linear-gradient(135deg, rgba(196,30,58,0.22), rgba(20,10,22,0.92));
+      border: 1px solid rgba(215, 180, 106, 0.38); border-radius: 22px; padding: 28px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="ageGate" class="sans">
+  <div class="gate-box">
+    <p class="kicker">Accesso Riservato • 18+</p>
+    <h2 style="font-family:Georgia,serif;font-size:32px;margin-top:10px;font-weight:400;">Our Velvet Magazine</h2>
+    <p style="color:#c8bdc8;font-size:14px;line-height:1.6;margin-top:12px;">
+      Questa rivista digitale contiene approfondimenti editoriali su sessualità adulta, cultura kink, eros queer/trans e intrattenimento 18+. Conferma di essere maggiorenne per proseguire.
+    </p>
+    <button class="read-btn" style="margin-top:22px;padding:14px;" onclick="enterMag()">Ho 18 anni o più · Entra nella Rivista</button>
+  </div>
+</div>
+
+<header class="sans">
+  <div class="nav-inner">
+    <a href="/magazine/" class="brand" style="font-family:Georgia,serif;">Our Velvet <span>Magazine 18+</span></a>
+    <div class="nav-links">
+      <a href="https://velvet.x-zdos.it/ourvelvet" class="pill">Club & Card</a>
+      <a href="https://velvet.x-zdos.it/zara/" class="pill pill-red">Parla con Zara AGI</a>
+      <a href="https://velvet.x-zdos.it/our-vault/" class="pill">$OV — Our Vault</a>
+      <a href="https://discord.gg/BcMh6vcpQX" target="_blank" class="pill">Discord VIP</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <p class="kicker sans">Edizione Notturna · Rassegna & Editoriali</p>
+  <h1>Desiderio, Potere e Cultura Erotica Senza Filtri.</h1>
+  <p class="sans">Tutte le rubriche selezionate dall'osservatorio internazionale — Donna & Sesso, Lesbo, Gay, Trans e Industria Adulta — rielaborate nello stile editoriale di <strong>Our Velvet</strong> con accesso diretto alle fonti originali.</p>
+</section>
+
+<div class="filters sans" id="filterBar"></div>
+<main class="grid" id="articlesGrid"></main>
+
+<section class="videoteca-banner sans">
+  <div class="v-card">
+    <div>
+      <p class="kicker">Accesso 18+ · Videoteca Reale</p>
+      <h3 style="font-family:Georgia,serif;font-size:26px;font-weight:400;margin-top:6px;">📼 Red Velvet // Videoteca Reale · Embed Ufficiali</h3>
+      <p style="color:#c8bdc8;font-size:14px;margin-top:6px;">Video espliciti tra adulti incorporati dai player ufficiali delle piattaforme. Solo maggiorenni.</p>
+    </div>
+    <a href="https://velvet.x-zdos.it/live" class="pill active" style="padding:13px 24px;">Apri la Videoteca 18+ →</a>
+  </div>
+</section>
+
+<div id="readerModal" class="sans" onclick="if(event.target===this)closeReader()">
+  <div class="reader-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span class="cat-tag" id="rCat"></span>
+      <button class="pill" onclick="closeReader()">Chiudi ✕</button>
+    </div>
+    <h2 id="rTitle" style="font-family:Georgia,serif;"></h2>
+    <p id="rMeta" style="font-size:12px;color:#d7b46a;margin-bottom:20px;"></p>
+    <div class="reader-body" id="rBody" style="font-family:Georgia,serif;"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.12);">
+      <a id="rSource" href="#" target="_blank" rel="noopener" class="pill active">Apri l'articolo originale →</a>
+      <a href="https://velvet.x-zdos.it/zara/" class="pill pill-red">Commenta con Zara AGI</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let ALL_ARTICLES = [];
+let CURRENT_CAT = "TUTTI";
+
+if (localStorage.getItem("ov_mag_18") === "1") {
+  document.getElementById("ageGate").style.display = "none";
+}
+function enterMag() {
+  localStorage.setItem("ov_mag_18", "1");
+  document.getElementById("ageGate").style.display = "none";
+}
+
+async function init() {
+  const res = await fetch("/magazine/articles.json");
+  ALL_ARTICLES = await res.json();
+
+  const params = new URLSearchParams(window.location.search);
+  const reqCat = params.get("rubrica");
+  if (reqCat) CURRENT_CAT = reqCat.toUpperCase();
+
+  const cats = ["TUTTI", ...new Set(ALL_ARTICLES.map(a => a.category))];
+  const fb = document.getElementById("filterBar");
+  fb.innerHTML = cats.map(c =>
+    `<button class="pill ${c === CURRENT_CAT ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
+  ).join("");
+
+  renderGrid();
+
+  const reqId = params.get("articolo");
+  if (reqId) {
+    const found = ALL_ARTICLES.find(a => a.id === reqId);
+    if (found) openReader(found.id);
+  }
+}
+
+function setCat(c) {
+  CURRENT_CAT = c;
+  document.querySelectorAll("#filterBar .pill").forEach(b => {
+    b.classList.toggle("active", b.textContent === c);
+  });
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById("articlesGrid");
+  const list = CURRENT_CAT === "TUTTI" ? ALL_ARTICLES : ALL_ARTICLES.filter(a => a.category === CURRENT_CAT);
+  grid.innerHTML = list.map(a => `
+    <article class="card">
+      <div>
+        <span class="cat-tag sans">${a.category} · ${a.badge}</span>
+        <h2>${a.title}</h2>
+        <p class="sans">${a.subtitle}</p>
+      </div>
+      <div>
+        <div class="meta sans">
+          <span>${a.sourceName} · ${a.sourceDate}</span>
+          <span>${a.readTime}</span>
+        </div>
+        <button class="read-btn sans" onclick="openReader('${a.id}')">Leggi l'Editoriale Our Velvet →</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function openReader(id) {
+  const a = ALL_ARTICLES.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("rCat").textContent = `${a.category} · ${a.badge}`;
+  document.getElementById("rTitle").textContent = a.title;
+  document.getElementById("rMeta").textContent = `Fonte: ${a.sourceName} (${a.sourceDate}) • Rielaborazione Editoriale Our Velvet`;
+  document.getElementById("rBody").innerHTML = a.editorial.map(p => `<p>${p}</p>`).join("");
+  document.getElementById("rSource").href = a.sourceUrl;
+  document.getElementById("readerModal").style.display = "block";
+}
+function closeReader() {
+  document.getElementById("readerModal").style.display = "none";
+}
+init();
+</script>
+</body>
+</html>
