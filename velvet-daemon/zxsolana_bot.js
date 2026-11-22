@@ -91,6 +91,24 @@ client.on("messageCreate", async (message) => {
   console.log("[MSG]", message.author.username, JSON.stringify(message.content));
   const rawTxt = message.content.replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
 
+  
+  if (/^!cassa\b/i.test(rawTxt)) {
+    const { execFileSync } = require("child_process");
+    const py = `
+import sqlite3, json
+conn = sqlite3.connect("/root/velvet-claw/tributes.db")
+conn.execute("CREATE TABLE IF NOT EXISTS tributes (sig TEXT PRIMARY KEY, user_id TEXT, username TEXT, sol REAL, tier TEXT, ts DATETIME DEFAULT CURRENT_TIMESTAMP)")
+tot, cnt = conn.execute("SELECT COALESCE(SUM(sol),0), COUNT(*) FROM tributes").fetchone()
+rows = conn.execute("SELECT username, sol, tier, ts FROM tributes ORDER BY ts DESC LIMIT 5").fetchall()
+print(json.dumps({"tot": tot, "cnt": cnt, "rows": rows}))
+`;
+    const stats = JSON.parse(execFileSync("python3", ["-c", py], { encoding: "utf8" }));
+    const list = stats.rows.length
+      ? stats.rows.map(r => `• **${r[0]}** — \`${Number(r[1]).toFixed(4)} SOL\` (\`${r[2]}\`) — ${r[3]}`).join("\n")
+      : "• Nessun tributo registrato ancora in database.";
+    return message.reply(`💰 **[CASSA & TREASURY VELVET CITY]**\n• **Totale Incassato:** \`${Number(stats.tot).toFixed(4)} SOL\` (${stats.cnt} transazioni)\n• **Wallet Treasury:** \`6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD\`\n\n**Ultimi movimenti:**\n${list}`);
+  }
+
   if (/^!listino\b/i.test(rawTxt)) {
     const menu = [
       "🩸 **[LISTINO UFFICIALE VELVET CITY // ACCESSI & TRIBUTI ON-CHAIN]**",
