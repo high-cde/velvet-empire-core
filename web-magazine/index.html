@@ -3,251 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OUR VELVET MAGAZINE // Cyber-Gothic Editorial & News 18+</title>
+  <title>OURVELVET & ROSE // MAGAZINE 18+</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070409;
-      --bg-card: rgba(18, 8, 17, 0.84);
-      --crimson: #c41e3a;
-      --crimson-dark: #7a0d22;
-      --gold: #d4af37;
-      --gold-soft: #f0d479;
-      --text: #f3ebf2;
-      --muted: #b5a3b3;
-      --border-gold: rgba(212, 175, 55, 0.34);
-      --border-red: rgba(196, 30, 58, 0.45);
+      --bg-dark: #090307;
+      --velvet-deep: #240411;
+      --velvet-crimson: #9e0b36;
+      --neon-pink: #ff1e6e;
+      --gold: #d7b46a;
+      --text: #f7eef3;
+      --muted: #dec4d1;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background:
-        radial-gradient(circle at 18% 0%, rgba(196, 30, 58, 0.24) 0%, transparent 45%),
-        radial-gradient(circle at 85% 12%, rgba(212, 175, 55, 0.12) 0%, transparent 40%),
-        #070409;
+      background-color: var(--bg-dark);
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 20, 95, 0.14) 0px,
+          rgba(255, 20, 95, 0.14) 2px,
+          rgba(24, 3, 12, 0.92) 2px,
+          rgba(24, 3, 12, 0.92) 5px
+        ),
+        radial-gradient(circle at 50% 18%, #7d082b 0%, #260411 52%, #090307 100%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       min-height: 100vh;
     }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
     .cinzel { font-family: 'Cinzel', Georgia, serif; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
 
     /* Gate 18+ */
     #ageGate {
       position: fixed; inset: 0; z-index: 9999;
-      background: rgba(5, 3, 7, 0.96); backdrop-filter: blur(22px);
+      background: rgba(7, 2, 5, 0.96); backdrop-filter: blur(20px);
       display: flex; align-items: center; justify-content: center; padding: 20px;
     }
     .gate-box {
-      max-width: 520px; width: 100%; background: var(--bg-card);
-      border: 1px solid var(--border-gold); border-radius: 24px;
-      padding: 36px; text-align: center; box-shadow: 0 28px 70px rgba(0,0,0,0.9);
+      max-width: 460px; width: 100%;
+      background: linear-gradient(160deg, rgba(64, 6, 26, 0.92), rgba(14, 4, 9, 0.96));
+      border: 1px solid rgba(255, 30, 110, 0.5); border-radius: 24px;
+      padding: 32px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.9);
     }
 
-    /* Ticker Notizie Live */
-    .ticker-bar {
-      background: linear-gradient(90deg, #1b060e, #2b0916, #1b060e);
-      border-bottom: 1px solid var(--border-red);
-      padding: 8px 16px; font-size: 11px; overflow: hidden; white-space: nowrap;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .ticker-badge {
-      background: var(--crimson); color: #fff; padding: 2px 9px; border-radius: 999px;
-      font-weight: 700; letter-spacing: 1px; flex-shrink: 0;
-    }
-    .ticker-track {
-      display: inline-block; animation: marquee 42s linear infinite; color: var(--gold-soft);
-    }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    /* Header Glass */
+    /* Top Bar identica alla Home OURVELVET & ROSE */
     header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(9, 5, 12, 0.86); backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border-gold);
+      position: sticky; top: 0; z-index: 60;
+      background: rgba(11, 4, 8, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 30, 110, 0.28);
     }
-    .nav-inner {
-      max-width: 1240px; margin: 0 auto; padding: 14px 20px;
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+    .nav-bar {
+      max-width: 1180px; margin: 0 auto; padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
-    .brand { text-decoration: none; color: #fff; display: flex; align-items: baseline; gap: 10px; }
-    .brand-main { font-size: 23px; letter-spacing: 1.5px; font-weight: 700; }
-    .brand-sub { color: var(--gold); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; }
-    .nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pill {
-      padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      text-decoration: none; border: 1px solid rgba(255,255,255,0.14); color: var(--text);
-      transition: 0.2s; cursor: pointer; background: rgba(255,255,255,0.03);
+    .brand-group {
+      display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff;
     }
-    .pill:hover, .pill.active { background: var(--gold); color: #08050a; border-color: var(--gold); }
-    .pill-crimson { background: rgba(196, 30, 58, 0.25); border-color: var(--crimson); }
+    .ov-orb {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff1e6e, #7c0623 75%);
+      border: 1.5px solid rgba(255, 130, 175, 0.65);
+      box-shadow: 0 0 18px rgba(255, 30, 110, 0.55);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-weight: 800; font-size: 13px; color: #fff;
+      flex-shrink: 0;
+    }
+    .brand-title {
+      font-size: 15px; letter-spacing: 1.4px; font-weight: 700; line-height: 1.1;
+    }
+    .brand-sub {
+      font-size: 9px; letter-spacing: 2px; color: var(--gold); display: block; margin-top: 2px;
+    }
 
-    /* Hero Editoriale + Prima Pagina */
+    /* Tasto Menu Dedicato stile Home */
+    .menu-btn {
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 15px; border-radius: 999px;
+      background: linear-gradient(180deg, rgba(130, 12, 48, 0.75), rgba(58, 5, 22, 0.9));
+      border: 1px solid rgba(255, 55, 125, 0.65);
+      box-shadow: 0 0 16px rgba(255, 30, 110, 0.3);
+      color: #ff9ec0; font-weight: 800; font-size: 11px; letter-spacing: 1px;
+    }
+    .menu-btn:hover { border-color: var(--gold); color: #fff; }
+
+    /* Sub-bar Safeword / Stato */
+    .safe-strip {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 7px 16px; font-size: 11px; color: #e4c7d5;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      max-width: 1180px; margin: 0 auto;
+    }
+    .dot-red {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #ff2a55; box-shadow: 0 0 8px #ff2a55; margin-right: 6px;
+    }
+
+    /* Pannello Menu Dedicato a Scomparsa (Dietro al tasto MENU) */
+    #dedicatedDrawer {
+      display: none;
+      position: fixed; top: 64px; right: 14px; z-index: 95;
+      width: 310px; max-width: calc(100vw - 28px);
+      background: rgba(14, 4, 10, 0.97);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 45, 115, 0.55);
+      border-radius: 20px; padding: 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.95);
+    }
+    #dedicatedDrawer.open { display: block; }
+    .d-sec-title {
+      font-size: 10px; letter-spacing: 1.8px; color: var(--gold);
+      margin: 8px 0 6px; text-transform: uppercase;
+    }
+    .d-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; border-radius: 11px; margin-bottom: 5px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff; text-decoration: none; font-size: 12px; font-weight: 700;
+    }
+    .d-link:hover { border-color: var(--neon-pink); background: rgba(255, 30, 110, 0.16); }
+
+    /* Hero Compatto stile Home */
     .hero {
-      max-width: 1240px; margin: 0 auto; padding: 36px 20px 26px;
-      display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 22px; align-items: stretch;
+      max-width: 980px; margin: 0 auto; padding: 28px 18px 18px; text-align: center;
     }
-    @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
-    .hero-main {
-      background: linear-gradient(145deg, rgba(28, 10, 22, 0.9), rgba(11, 6, 14, 0.92));
-      border: 1px solid var(--border-gold); border-radius: 24px; padding: 30px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    .orb-hero {
+      width: 78px; height: 78px; border-radius: 50%; margin: 0 auto 14px;
+      background: radial-gradient(circle at 35% 30%, #ff1e6e, #780522 76%);
+      border: 2px solid rgba(255, 130, 175, 0.6);
+      box-shadow: 0 0 34px rgba(255, 30, 110, 0.55), 0 0 0 10px rgba(255, 30, 110, 0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 22px; font-weight: 800; color: #fff;
     }
-    .hero-main h1 { font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05; margin-top: 10px; font-weight: 700; }
-    .hero-main p { color: var(--muted); font-size: 14px; line-height: 1.65; margin-top: 14px; }
-    .stats-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: var(--gold-soft); }
+    .kicker-pill {
+      display: inline-block; padding: 7px 16px; border-radius: 999px;
+      background: rgba(38, 5, 18, 0.78); border: 1px solid rgba(255, 55, 125, 0.45);
+      color: #f3c6d9; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 6.2vw, 48px); line-height: 1.08; margin-top: 14px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      text-shadow: 0 4px 24px rgba(255, 20, 95, 0.45);
+    }
+    .hero p {
+      max-width: 680px; margin: 12px auto 0; font-size: 13.5px; line-height: 1.65;
+      color: var(--muted);
+    }
 
-    .hero-featured {
-      background: linear-gradient(160deg, rgba(196, 30, 58, 0.22), rgba(15, 7, 16, 0.95));
-      border: 1px solid var(--border-red); border-radius: 24px; padding: 26px;
-      display: flex; flex-direction: column; justify-content: space-between;
+    /* Barra Filtri Compatta e Pulita (1 riga + toggle) */
+    .toolbar {
+      max-width: 1180px; margin: 10px auto 0; padding: 0 16px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
     }
+    .rubriche-toggle {
+      padding: 8px 15px; border-radius: 999px; cursor: pointer;
+      background: rgba(18, 5, 12, 0.9); border: 1px solid rgba(215, 180, 106, 0.5);
+      color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: 1px;
+    }
+    .search-input {
+      flex: 1; min-width: 180px; max-width: 320px;
+      background: rgba(14, 4, 10, 0.9); border: 1px solid rgba(255, 55, 125, 0.35);
+      border-radius: 999px; padding: 8px 15px; color: #fff; font-size: 12px;
+    }
+    .search-input:focus { outline: none; border-color: var(--gold); }
 
-    /* Barra Filtri + Ricerca */
-    .controls {
-      max-width: 1240px; margin: 6px auto 0; padding: 0 20px;
-      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+    #rubrichePanel {
+      max-width: 1180px; margin: 10px auto 0; padding: 0 16px;
+      display: none; flex-wrap: wrap; gap: 7px;
     }
-    .filters { display: flex; flex-wrap: wrap; gap: 7px; }
-    .search-box {
-      background: rgba(15, 8, 16, 0.9); border: 1px solid var(--border-gold);
-      border-radius: 999px; padding: 9px 16px; color: #fff; font-size: 12px; width: 260px; max-width: 100%;
+    #rubrichePanel.open { display: flex; }
+    .cat-pill {
+      padding: 7px 13px; border-radius: 999px; font-size: 11px; font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.16); background: rgba(16, 5, 11, 0.85);
+      color: #f3dce7; cursor: pointer;
     }
-    .search-box:focus { outline: none; border-color: var(--crimson); }
+    .cat-pill.active { background: var(--gold); color: #090307; border-color: var(--gold); }
 
     /* Griglia Articoli */
     .grid {
-      max-width: 1240px; margin: 24px auto 56px; padding: 0 20px;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;
+      max-width: 1180px; margin: 20px auto 64px; padding: 0 16px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px;
     }
     .card {
-      background: var(--bg-card); backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
-      transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
+      background: linear-gradient(165deg, rgba(28, 6, 17, 0.9), rgba(11, 3, 8, 0.94));
+      border: 1px solid rgba(255, 45, 115, 0.28);
+      border-radius: 20px; padding: 22px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.75);
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .card:hover {
-      transform: translateY(-4px); border-color: var(--gold);
-      box-shadow: 0 16px 38px rgba(196, 30, 58, 0.18);
+    .card:hover { transform: translateY(-3px); border-color: var(--gold); }
+    .card-badge {
+      display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.3px;
+      color: #ff9ec0; background: rgba(255, 30, 110, 0.18);
+      border: 1px solid rgba(255, 30, 110, 0.42); padding: 4px 10px; border-radius: 999px;
     }
-    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .cat-tag {
-      font-size: 10px; font-weight: 700; letter-spacing: 1.4px;
-      color: var(--gold-soft); background: rgba(196, 30, 58, 0.28);
-      border: 1px solid rgba(196, 30, 58, 0.55); padding: 4px 10px; border-radius: 999px;
+    .card h2 { font-size: 24px; line-height: 1.22; margin-top: 12px; color: #fff; }
+    .card p { font-size: 13px; line-height: 1.6; color: var(--muted); margin-top: 9px; }
+    .card-meta {
+      margin-top: 16px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between; font-size: 10.5px; color: #c7a6b6;
     }
-    .card h2 { font-size: 25px; line-height: 1.22; margin-top: 14px; font-weight: 700; color: #fff; }
-    .card p { color: var(--muted); font-size: 13.5px; line-height: 1.6; margin-top: 10px; }
-    .meta {
-      margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08);
-      display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #a895a7;
+    .card-btns { display: flex; gap: 8px; margin-top: 13px; }
+    .btn-gold {
+      flex: 1; padding: 10px 14px; border-radius: 999px; border: none; cursor: pointer;
+      background: var(--gold); color: #090307; font-weight: 800; font-size: 12px; text-align: center;
     }
-    .card-actions { display: flex; gap: 8px; margin-top: 14px; }
-    .read-btn {
-      flex: 1; padding: 10px 14px; border-radius: 999px; background: var(--gold); color: #08050a;
-      font-weight: 800; font-size: 12px; border: none; cursor: pointer; text-align: center; text-decoration: none;
-    }
-    .ext-btn {
-      padding: 10px 13px; border-radius: 999px; background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14); color: #fff; font-size: 11px; font-weight: 700; text-decoration: none;
+    .btn-src {
+      padding: 10px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05); color: #fff; font-size: 11px; font-weight: 700; text-decoration: none;
     }
 
-    /* Modale Lettore */
+    /* Modale Lettura */
     #readerModal {
-      position: fixed; inset: 0; z-index: 999; background: rgba(4, 2, 6, 0.93);
-      backdrop-filter: blur(16px); display: none; overflow-y: auto; padding: 28px 14px;
+      position: fixed; inset: 0; z-index: 999; background: rgba(5, 2, 4, 0.94);
+      backdrop-filter: blur(16px); display: none; overflow-y: auto; padding: 24px 14px;
     }
     .reader-box {
-      max-width: 780px; margin: 0 auto; background: #120813;
-      border: 1px solid var(--border-gold); border-radius: 24px; padding: 34px;
+      max-width: 740px; margin: 0 auto;
+      background: linear-gradient(165deg, #220512, #0c0308);
+      border: 1px solid rgba(255, 45, 115, 0.45); border-radius: 22px; padding: 28px;
     }
-    .reader-box h2 { font-size: 36px; line-height: 1.15; margin: 14px 0; font-weight: 700; }
-    .reader-body p { font-size: 19px; line-height: 1.75; color: #ece0eb; margin-bottom: 18px; }
+    .reader-body p { font-size: 18px; line-height: 1.75; color: #f2e2ea; margin-bottom: 16px; }
   </style>
 </head>
 <body>
 
 <div id="ageGate">
   <div class="gate-box">
-    <p class="mono" style="color:var(--gold);font-size:11px;letter-spacing:2px;">VERIFICA ACCESSO • 18+ ONLY</p>
-    <h2 class="cinzel" style="font-size:30px;margin-top:10px;">OUR VELVET MAGAZINE</h2>
-    <p style="color:#c8b8c7;font-size:14px;line-height:1.6;margin-top:12px;">
-      Rivista editoriale notturna dedicata a sessualità adulta, eros queer/trans, cultura cyberpunk & AGI 18+. Conferma la maggiore età per entrare.
+    <div class="orb-hero" style="width:62px;height:62px;font-size:18px;">OV♥</div>
+    <p class="mono" style="color:var(--gold);font-size:10px;letter-spacing:2px;">SOLO ADULTI 18+ · CONSENSO · SAFEWORD ROSSO</p>
+    <h2 class="cinzel" style="font-size:24px;margin-top:10px;">OURVELVET & ROSE MAGAZINE</h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6;margin-top:10px;">
+      Rivista editoriale 18+ su desiderio, cultura erotica, eros queer/trans e novità Zara AGI. Conferma di essere maggiorenne.
     </p>
-    <button class="read-btn" style="width:100%;margin-top:22px;padding:14px;" onclick="enterMag()">HO 18 ANNI O PIÙ · ENTRA NELLA RIVISTA</button>
-  </div>
-</div>
-
-<div class="ticker-bar mono">
-  <span class="ticker-badge">LIVE EDITION 18+</span>
-  <div style="overflow:hidden;flex:1;">
-    <div class="ticker-track" id="tickerTrack">Caricamento ultime notizie da 25+ testate internazionali e dall'ecosistema Our Velvet & Zara AGI...</div>
+    <button class="btn-gold" style="width:100%;margin-top:20px;padding:13px;" onclick="enterMag()">HO 18 ANNI O PIÙ · ENTRA</button>
   </div>
 </div>
 
 <header>
-  <div class="nav-inner">
-    <a href="/magazine/" class="brand">
-      <span class="brand-main cinzel">OUR VELVET</span>
-      <span class="brand-sub mono">Magazine 18+</span>
+  <div class="nav-bar">
+    <a href="https://velvet.x-zdos.it/" class="brand-group">
+      <div class="ov-orb">OV♥</div>
+      <div>
+        <div class="brand-title cinzel">OURVELVET & ROSE</div>
+        <span class="brand-sub mono">MAGAZINE 18+ • EDIZIONE NOTTURNA</span>
+      </div>
     </a>
-    <div class="nav-links">
-      <a href="https://velvet.x-zdos.it/" class="pill">Club Home</a>
-      <a href="https://velvet.x-zdos.it/zara/" class="pill pill-crimson">💋 Zara AGI</a>
-      <a href="https://velvet.x-zdos.it/live" class="pill">📼 Videoteca 18+</a>
-      <a href="https://velvet.x-zdos.it/hub/" class="pill">Sezioni AI & Velvet</a>
-      <a href="https://x-zdos.it/hub/" class="pill">⚡ Polo Crypto ZDOS</a>
-    </div>
+    <button class="menu-btn mono" onclick="toggleMenu()">🔥 MENU ▼</button>
+  </div>
+  <div class="safe-strip mono">
+    <span><i class="dot-red"></i>Rubina · solo 18+ · consenso · safeword ROSSO</span>
+    <span id="editionCount">LIVE</span>
   </div>
 </header>
 
-<section class="hero">
-  <div class="hero-main">
-    <div>
-      <p class="mono" style="color:var(--gold);font-size:11px;letter-spacing:2.5px;">CYBER-GOTHIC LUXURY EDITORIAL • AGGIORNAMENTO CONTINUO</p>
-      <h1 class="serif">Desiderio, Potere e Cultura Erotica Senza Filtri.</h1>
-      <p>La rivista ufficiale di <strong>Our Velvet</strong>: oltre 25 testate internazionali e italiane selezionate in tempo reale, rielaborate con l'estetica del club e collegate direttamente alle fonti originali e ai nodi <strong>Zara AGI</strong>.</p>
-    </div>
-    <div class="stats-row mono" id="statsBar">
-      <span>● 25+ TESTATE COLLEGATE</span>
-      <span>● CACHE LIVE 20 MIN</span>
-      <span>● 6 RUBRICHE TEMATICHE</span>
-    </div>
+<!-- Menu Dedicato Compatto dietro al tasto 🔥 MENU ▼ -->
+<nav id="dedicatedDrawer">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+    <strong class="mono" style="color:#ff9ec0;font-size:11px;">NAVIGAZIONE OURVELVET</strong>
+    <button onclick="toggleMenu()" style="background:none;border:none;color:#fff;cursor:pointer;font-size:14px;">✕</button>
   </div>
 
-  <div class="hero-featured" id="featuredBox">
-    <p class="mono" style="color:var(--gold-soft);font-size:10px;letter-spacing:2px;">IN PRIMO PIANO • REDAZIONE</p>
-    <h2 class="serif" style="font-size:28px;line-height:1.2;margin-top:8px;" id="featTitle">Caricamento...</h2>
-    <p style="color:#d6c6d5;font-size:13px;line-height:1.55;margin-top:10px;" id="featSub"></p>
-    <div style="margin-top:16px;">
-      <button class="read-btn" id="featBtn" style="width:100%;">Leggi l'Editoriale Completo →</button>
-    </div>
-  </div>
+  <div class="d-sec-title mono">01 · Club & Ruoli 18+</div>
+  <a class="d-link" href="https://velvet.x-zdos.it/"><span>🏛️ Home OurVelvet & Rose</span><span>→</span></a>
+  <a class="d-link" href="https://velvet.x-zdos.it/ourvelvet"><span>🪪 Card Utente & Badge</span><span>→</span></a>
+  <a class="d-link" href="https://velvet.x-zdos.it/accesso"><span>👑 Creator / Mistress & Slave</span><span>→</span></a>
+  <a class="d-link" href="https://velvet.x-zdos.it/live"><span>📼 Red Velvet Videoteca 18+</span><span>→</span></a>
+
+  <div class="d-sec-title mono">02 · AGI & Community</div>
+  <a class="d-link" href="https://velvet.x-zdos.it/zara/"><span>💋 Zara AGI Console (18+)</span><span>→</span></a>
+  <a class="d-link" href="https://velvet.x-zdos.it/hub/"><span>🧭 Indice Completo AI & Velvet</span><span>→</span></a>
+  <a class="d-link" href="https://discord.gg/BcMh6vcpQX" target="_blank"><span>💬 Discord (118 Stanze Live)</span><span>↗</span></a>
+
+  <div class="d-sec-title mono">03 · Polo Crypto & ZDOS</div>
+  <a class="d-link" href="https://x-zdos.it/fomo/" style="border-color:rgba(215,180,106,0.4);color:var(--gold);"><span>🚀 $OV & $DSN Solana</span><span>↗</span></a>
+  <a class="d-link" href="https://x-zdos.it/our-vault/"><span>🏦 $OV — Our Vault (Mining)</span><span>↗</span></a>
+</nav>
+
+<section class="hero">
+  <div class="orb-hero">OV♥</div>
+  <div class="kicker-pill mono">✦ OURVELVET & ROSE // RASSEGNA & EDITORIALI 18+ ✦</div>
+  <h1 class="cinzel">Desiderio, Potere & Cultura Erotica.</h1>
+  <p>Oltre 25 testate internazionali e italiane selezionate in tempo reale — Donna & Sesso, Lesbo, Gay, Trans, Industria Adulta e Novità Zara AGI — con accesso diretto alle fonti originali.</p>
 </section>
 
-<div class="controls">
-  <div class="filters" id="filterBar"></div>
-  <input type="search" id="searchInput" class="search-box" placeholder="Cerca articolo, tema o rivista..." oninput="renderGrid()" />
+<div class="toolbar">
+  <button class="rubriche-toggle mono" id="rubricaBtn" onclick="toggleRubriche()">📂 RUBRICA: TUTTI ▼</button>
+  <input type="search" id="searchInput" class="search-input" placeholder="Cerca articolo o testata..." oninput="renderGrid()" />
 </div>
 
+<div id="rubrichePanel"></div>
 <main class="grid" id="articlesGrid"></main>
 
 <div id="readerModal" onclick="if(event.target===this)closeReader()">
   <div class="reader-box">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <span class="cat-tag mono" id="rCat"></span>
-      <button class="pill" onclick="closeReader()">Chiudi ✕</button>
+      <span class="card-badge mono" id="rCat"></span>
+      <button class="btn-src" onclick="closeReader()">Chiudi ✕</button>
     </div>
-    <h2 class="serif" id="rTitle"></h2>
-    <p class="mono" id="rMeta" style="font-size:11px;color:var(--gold);margin-bottom:20px;"></p>
+    <h2 class="serif" id="rTitle" style="font-size:32px;line-height:1.18;margin:14px 0;"></h2>
+    <p class="mono" id="rMeta" style="font-size:10.5px;color:var(--gold);margin-bottom:18px;"></p>
     <div class="reader-body serif" id="rBody"></div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.12);">
-      <a id="rSource" href="#" target="_blank" rel="noopener" class="pill active">Vai alla Fonte Originale →</a>
-      <a href="https://velvet.x-zdos.it/zara/" class="pill pill-crimson">Discuti con Zara AGI</a>
-      <a href="https://velvet.x-zdos.it/live" class="pill">Apri Videoteca 18+</a>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.12);">
+      <a id="rSource" href="#" target="_blank" rel="noopener" class="btn-gold" style="text-decoration:none;">Apri l'Originale ↗</a>
+      <a href="https://velvet.x-zdos.it/zara/" class="btn-src">Commenta con Zara AGI</a>
     </div>
   </div>
 </div>
@@ -263,34 +328,28 @@ function enterMag() {
   localStorage.setItem("ov_mag_18", "1");
   document.getElementById("ageGate").style.display = "none";
 }
+function toggleMenu() {
+  document.getElementById("dedicatedDrawer").classList.toggle("open");
+}
+function toggleRubriche() {
+  document.getElementById("rubrichePanel").classList.toggle("open");
+}
 
 async function init() {
   const res = await fetch("/magazine/articles.json?v=" + Date.now());
   ALL_ARTICLES = await res.json();
-
-  // Popola ticker scorrevole
-  const headlines = ALL_ARTICLES.slice(0, 12).map(a => `[${a.category}] ${a.title}`).join("   ✦   ");
-  document.getElementById("tickerTrack").textContent = headlines + "   ✦   " + headlines;
-  document.getElementById("statsBar").innerHTML =
-    `<span>● ${ALL_ARTICLES.length} ARTICOLI IN EDIZIONE</span><span>● 25+ TESTATE LIVE</span><span>● CYBER-GOTHIC 18+</span>`;
-
-  // Primo piano
-  if (ALL_ARTICLES.length > 0) {
-    const f = ALL_ARTICLES[0];
-    document.getElementById("featTitle").textContent = f.title;
-    document.getElementById("featSub").textContent = f.subtitle;
-    document.getElementById("featBtn").onclick = () => openReader(f.id);
-  }
+  document.getElementById("editionCount").textContent = `${ALL_ARTICLES.length} ARTICOLI`;
 
   const params = new URLSearchParams(window.location.search);
   const reqCat = params.get("rubrica");
   if (reqCat) CURRENT_CAT = reqCat.toUpperCase();
 
   const cats = ["TUTTI", "NOVITÀ & AGI 18+", "DONNA & SESSO", "LESBO", "GAY", "TRANS", "PORNO MISTO"];
-  const fb = document.getElementById("filterBar");
-  fb.innerHTML = cats.map(c =>
-    `<button class="pill ${c === CURRENT_CAT ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
+  const panel = document.getElementById("rubrichePanel");
+  panel.innerHTML = cats.map(c =>
+    `<button class="cat-pill mono ${c === CURRENT_CAT ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>`
   ).join("");
+  document.getElementById("rubricaBtn").textContent = `📂 RUBRICA: ${CURRENT_CAT} ▼`;
 
   renderGrid();
 
@@ -303,9 +362,11 @@ async function init() {
 
 function setCat(c) {
   CURRENT_CAT = c;
-  document.querySelectorAll("#filterBar .pill").forEach(b => {
+  document.getElementById("rubricaBtn").textContent = `📂 RUBRICA: ${c} ▼`;
+  document.querySelectorAll("#rubrichePanel .cat-pill").forEach(b => {
     b.classList.toggle("active", b.textContent === c);
   });
+  document.getElementById("rubrichePanel").classList.remove("open");
   renderGrid();
 }
 
@@ -321,21 +382,18 @@ function renderGrid() {
   grid.innerHTML = list.map(a => `
     <article class="card">
       <div>
-        <div class="card-top">
-          <span class="cat-tag mono">${a.category}</span>
-          <span class="mono" style="font-size:10px;color:#d4af37;">${a.badge}</span>
-        </div>
+        <span class="card-badge mono">${a.category} · ${a.badge}</span>
         <h2 class="serif">${a.title}</h2>
         <p>${a.subtitle}</p>
       </div>
       <div>
-        <div class="meta mono">
+        <div class="card-meta mono">
           <span>${a.sourceName}</span>
-          <span>${a.sourceDate} · ${a.readTime}</span>
+          <span>${a.sourceDate}</span>
         </div>
-        <div class="card-actions">
-          <button class="read-btn" onclick="openReader('${a.id}')">Leggi Editoriale →</button>
-          <a class="ext-btn" href="${a.sourceUrl}" target="_blank" rel="noopener">Fonte ↗</a>
+        <div class="card-btns">
+          <button class="btn-gold" onclick="openReader('${a.id}')">Leggi Editoriale →</button>
+          <a class="btn-src" href="${a.sourceUrl}" target="_blank" rel="noopener">Fonte ↗</a>
         </div>
       </div>
     </article>
@@ -347,7 +405,7 @@ function openReader(id) {
   if (!a) return;
   document.getElementById("rCat").textContent = `${a.category} · ${a.badge}`;
   document.getElementById("rTitle").textContent = a.title;
-  document.getElementById("rMeta").textContent = `FONTE: ${a.sourceName} (${a.sourceDate}) • REDAZIONE OUR VELVET`;
+  document.getElementById("rMeta").textContent = `FONTE: ${a.sourceName} (${a.sourceDate})`;
   document.getElementById("rBody").innerHTML = a.editorial.map(p => `<p>${p}</p>`).join("");
   document.getElementById("rSource").href = a.sourceUrl;
   document.getElementById("readerModal").style.display = "block";

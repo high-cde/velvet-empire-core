@@ -64,8 +64,10 @@
   ].join("");
 
   trigger.onclick = function () { drawer.style.display = drawer.style.display === "none" ? "block" : "none"; };
-  document.body.appendChild(drawer);
-  document.body.appendChild(trigger);
+  if (!window.location.pathname.startsWith("/magazine")) {
+    document.body.appendChild(drawer);
+    document.body.appendChild(trigger);
+  }
   setInterval(wireFeedCards, 1500);
   wireFeedCards();
 })();
