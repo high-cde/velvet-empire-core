@@ -1,24 +1,30 @@
 server {
+    if ($host = velvet.x-zdos.it) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     listen 80;
     listen [::]:80;
     server_name velvet.x-zdos.it;
     return 301 https://$host$request_uri;
+
+
 }
 
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
     server_name velvet.x-zdos.it;
+    ssl_certificate /etc/letsencrypt/live/velvet.x-zdos.it/fullchain.pem; # managed by Certbot
 
-    ssl_certificate /etc/letsencrypt/live/velvet.x-zdos.it/fullchain.pem;
     
     location ^~ /api/velvet-pay/ {
         proxy_pass http://127.0.0.1:3050/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
-
-    ssl_certificate_key /etc/letsencrypt/live/velvet.x-zdos.it/privkey.pem;
+    ssl_certificate_key /etc/letsencrypt/live/velvet.x-zdos.it/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -327,4 +333,5 @@ server {
         sub_filter_once on;
         try_files $uri $uri/ /index.html;
     }
+
 }

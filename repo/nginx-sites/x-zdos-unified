@@ -1,8 +1,15 @@
 server {
+    if ($host = x-zdos.it) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     listen 80;
     listen [::]:80;
     server_name x-zdos.it www.x-zdos.it;
     return 301 https://x-zdos.it$request_uri;
+
+
 }
 server {
     listen 443 ssl;
@@ -18,9 +25,8 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
     server_name x-zdos.it;
-
-    ssl_certificate     /etc/letsencrypt/live/x-zdos.it/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/x-zdos.it/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/velvet.x-zdos.it/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/velvet.x-zdos.it/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -185,4 +191,5 @@ server {
         sub_filter_once on;
         try_files $uri $uri/ =404;
     }
+
 }
