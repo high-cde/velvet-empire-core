@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZDOS // $DSN Live Market &amp; Sovereign Terminal</title>
+  <style>
+    :root { --bg:#05070b; --card:rgba(12,18,28,0.86); --cyan:#00f0ff; --green:#00ff9d; --text:#e6f1ff; --muted:#7f93b0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:radial-gradient(circle at top,#0b1726 0%,var(--bg) 65%); color:var(--text); font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; min-height:100vh; padding:24px; }
+    .wrap { max-width:1080px; margin:0 auto; }
+    header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; padding-bottom:20px; border-bottom:1px solid rgba(0,240,255,0.2); margin-bottom:24px; }
+    .badge { background:rgba(0,255,157,0.12); border:1px solid var(--green); color:var(--green); padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+    h1 { font-size:1.5rem; color:var(--cyan); letter-spacing:0.5px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-bottom:24px; }
+    .card { background:var(--card); border:1px solid rgba(0,240,255,0.22); border-radius:14px; padding:18px; backdrop-filter:blur(10px); }
+    .card h2 { font-size:0.85rem; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+    .val { font-size:1.25rem; font-weight:700; color:var(--green); word-break:break-all; }
+    .mint { font-size:0.82rem; background:#030508; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); color:var(--cyan); user-select:all; margin-top:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+    .btn { text-decoration:none; padding:10px 16px; border-radius:10px; font-weight:700; font-size:0.9rem; transition:0.2s; }
+    .btn-cyan { background:var(--cyan); color:#02060c; }
+    .btn-outline { border:1px solid var(--cyan); color:var(--cyan); }
+    .chart-box { background:var(--card); border:1px solid rgba(0,240,255,0.22); border-radius:14px; overflow:hidden; height:520px; }
+    iframe { width:100%; height:100%; border:0; }
+    footer { margin-top:20px; text-align:center; color:var(--muted); font-size:0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>ZDOS // $DSN SOVEREIGN MARKET</h1>
+        <p style="color:var(--muted);font-size:0.85rem;margin-top:4px;">Build what you can prove · Bare-Metal &amp; Solana Native Infrastructure</p>
+      </div>
+      <span class="badge">● SOLANA MAINNET LIVE</span>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Token &amp; Rete</h2>
+        <div class="val">$DSN (xZDOS) · Solana SPL</div>
+        <div class="mint">35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4</div>
+      </div>
+      <div class="card">
+        <h2>Accesso Rapido Ecosistema</h2>
+        <p style="color:var(--muted);font-size:0.85rem;">Opera senza intermediari tramite gli endpoint sovrani ZDOS:</p>
+        <div class="actions">
+          <a class="btn btn-cyan" href="https://swap.x-zdos.it/">Apri zSWAP DEX →</a>
+          <a class="btn btn-outline" href="https://pump.fun/coin/35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4" target="_blank" rel="noopener">Pump.fun</a>
+          <a class="btn btn-outline" href="/our-vault/">Vault</a>
+          <a class="btn btn-outline" href="/">Home ZDOS</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <iframe src="https://dexscreener.com/solana/35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4?embed=1&theme=dark&trades=0&info=0" title="$DSN Live Chart"></iframe>
+    </div>
+
+    <footer>ZDOS Sovereign Computing Ecosystem · x-zdos.it</footer>
+  </div>
+</body>
+</html>

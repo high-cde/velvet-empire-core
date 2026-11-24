@@ -1,3 +1,13 @@
+const { execFile } = require("child_process");
+function evalZlangNative(program) {
+  return new Promise((resolve) => {
+    execFile("/usr/local/bin/organism-bin", ["--eval", program], { timeout: 5000 }, (err, stdout, stderr) => {
+      if (err) return resolve({ ok: false, error: stderr || err.message });
+      resolve({ ok: true, output: stdout.trim() });
+    });
+  });
+}
+
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
@@ -97,7 +107,24 @@ function askGrokMystic(name, intention) {
   });
 }
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
+  if (req.method === "POST" && req.url === "/api/zlang/eval") {
+    let body = "";
+    req.on("data", c => body += c);
+    req.on("end", async () => {
+      try {
+        const { code: zcode } = JSON.parse(body || "{}");
+        const out = await evalZlangNative(zcode || "");
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(out));
+      } catch (e) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");

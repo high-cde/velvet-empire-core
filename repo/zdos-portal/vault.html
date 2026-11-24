@@ -3,160 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>$OV — Our Vault // ZDOS Multi-Token Mining Hub</title>
+  <title>Our Vault Miner by ZDOS v2.0 // Sovereign Compute &amp; Solana Pool</title>
   <style>
-    :root { --bg:#08060a; --panel:rgba(22,12,24,0.82); --red:#c41e3a; --gold:#d4af37; --cyan:#00f0ff; --txt:#f4eef2; }
-    * { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',system-ui,sans-serif; }
-    body { background:radial-gradient(circle at top,#240914,#08060a 70%); color:var(--txt); min-height:100vh; padding:24px 14px; display:flex; justify-content:center; }
-    .wrap { width:100%; max-width:920px; display:flex; flex-direction:column; gap:18px; }
-    .card { background:var(--panel); backdrop-filter:blur(16px); border:1px solid rgba(196,30,58,0.4); border-radius:16px; padding:22px; box-shadow:0 14px 40px rgba(0,0,0,0.7); }
-    .badge { display:inline-block; font-size:11px; letter-spacing:1.5px; color:var(--gold); border:1px solid rgba(212,175,55,0.45); padding:4px 12px; border-radius:999px; margin-bottom:10px; }
-    h1 { font-size:24px; letter-spacing:0.6px; }
-    h1 span { color:var(--red); }
-    p.sub { color:#c9bcc7; font-size:13px; line-height:1.55; margin-top:6px; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:16px; }
-    label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:6px; }
-    select, input { width:100%; background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.16); border-radius:10px; padding:11px 12px; color:#fff; font-size:13px; }
-    select:focus, input:focus { outline:none; border-color:var(--cyan); }
-    .out { background:#050307; border:1px solid rgba(0,240,255,0.35); border-radius:12px; padding:14px; margin-top:16px; font-family:monospace; font-size:12px; color:var(--cyan); word-break:break-all; line-height:1.5; }
-    .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    button, a.btn { cursor:pointer; border:none; border-radius:999px; padding:10px 18px; font-size:12px; font-weight:700; text-decoration:none; transition:0.2s; }
-    .btn-gold { background:var(--gold); color:#09070d; }
-    .btn-red { background:rgba(196,30,58,0.25); border:1px solid var(--red); color:#fff; }
-    .tokens { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
-    .tag { font-size:11px; padding:4px 9px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#e2d8e0; }
+    :root { --bg:#04070d; --card:rgba(11,18,30,0.9); --cyan:#00f0ff; --green:#00ff9d; --purple:#9945FF; --gold:#ffd56a; --text:#e8f2ff; --muted:#7f95b5; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:radial-gradient(circle at top,#0a192f 0%,var(--bg) 68%); color:var(--text); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; min-height:100vh; padding:24px; }
+    .wrap { max-width:1120px; margin:0 auto; }
+    header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; padding-bottom:18px; border-bottom:1px solid rgba(0,240,255,0.22); margin-bottom:22px; }
+    h1 { font-size:1.45rem; color:var(--cyan); }
+    .pill { background:rgba(0,255,157,0.12); border:1px solid var(--green); color:var(--green); padding:5px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:22px; }
+    .card { background:var(--card); border:1px solid rgba(0,240,255,0.22); border-radius:14px; padding:18px; backdrop-filter:blur(12px); }
+    .card h2 { font-size:0.76rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .metric { font-size:1.4rem; font-weight:700; color:var(--green); }
+    .metric.gold { color:var(--gold); }
+    .sub { font-size:0.78rem; color:var(--muted); margin-top:6px; word-break:break-all; }
+    .bar-wrap { background:#02050a; border:1px solid rgba(0,240,255,0.25); border-radius:999px; height:10px; margin-top:10px; overflow:hidden; }
+    .bar-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--cyan),var(--green)); transition:width 0.5s ease; }
+    .panel { background:var(--card); border:1px solid rgba(153,69,255,0.35); border-radius:16px; padding:22px; margin-bottom:22px; }
+    .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:14px 0; }
+    label { display:block; font-size:0.78rem; color:var(--muted); margin-bottom:6px; }
+    input, select { width:100%; background:#03060c; border:1px solid rgba(0,240,255,0.3); color:var(--text); padding:10px 12px; border-radius:10px; font-family:inherit; }
+    pre { background:#020408; border:1px solid rgba(0,255,157,0.25); color:var(--green); padding:14px; border-radius:10px; overflow-x:auto; font-size:0.84rem; margin-top:12px; user-select:all; }
+    .btns { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+    .btn { display:inline-block; text-decoration:none; border:0; cursor:pointer; padding:10px 16px; border-radius:10px; font-weight:700; font-family:inherit; font-size:0.86rem; }
+    .btn-primary { background:linear-gradient(90deg,var(--cyan),var(--green)); color:#03070e; }
+    .btn-sec { background:rgba(255,255,255,0.06); border:1px solid rgba(0,240,255,0.35); color:var(--cyan); }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
-    <span class="badge">$OV — OUR VAULT • SOVEREIGN MINING & TREASURY BRIDGE</span>
-    <h1>$OV <span>—</span> OUR VAULT</h1>
-    <p class="sub">Mina con CPU (RandomX) o GPU (KawPow / Etchash / Autolykos2 / kHeavyHash) e ricevi payout diretti su Solana o multi-chain, alimentando automaticamente la liquidità <strong>$OV</strong> e <strong>$DSN</strong>.</p>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>OUR VAULT MINER // BY ZDOS v2.0</h1>
+        <p class="sub">Telemetria Unificata: Pool Live Hashrate + Solana Mainnet RPC + Treasury $DSN</p>
+      </div>
+      <span class="pill" id="node-badge">● SINCRONIZZAZIONE LIVE...</span>
+    </header>
 
     <div class="grid">
-      <div>
-        <label>1. Token di Payout (unMineable)</label>
-        <select id="coin" onchange="buildCmd()">
-          <optgroup label="Solana Core & Auto-Swap $OV / $DSN">
-            <option value="SOL" selected>SOL — Solana (Treasury Direct)</option>
-            <option value="USDT">USDT — Tether (SOL / Polygon)</option>
-            <option value="USDC">USDC — USD Coin (SOL / Polygon)</option>
-            <option value="JUP">JUP — Jupiter (Solana)</option>
-            <option value="RAY">RAY — Raydium (Solana)</option>
-            <option value="BONK">BONK — Bonk (Solana)</option>
-            <option value="WIF">WIF — dogwifhat (Solana)</option>
-            <option value="PYTH">PYTH — Pyth Network (Solana)</option>
-            <option value="RENDER">RENDER — Render (Solana)</option>
-          </optgroup>
-          <optgroup label="Layer 1 & Privacy">
-            <option value="BTC">BTC — Bitcoin</option>
-            <option value="ETH">ETH — Ethereum</option>
-            <option value="BNB">BNB — BNB Smart Chain</option>
-            <option value="TON">TON — Toncoin</option>
-            <option value="AVAX">AVAX — Avalanche</option>
-            <option value="KAS">KAS — Kaspa</option>
-            <option value="XMR">XMR — Monero</option>
-            <option value="RVN">RVN — Ravencoin</option>
-            <option value="ERG">ERG — Ergo</option>
-            <option value="LTC">LTC — Litecoin</option>
-            <option value="TRX">TRX — TRON</option>
-            <option value="SUI">SUI — Sui</option>
-            <option value="APT">APT — Aptos</option>
-            <option value="ADA">ADA — Cardano</option>
-            <option value="DOT">DOT — Polkadot</option>
-            <option value="ATOM">ATOM — Cosmos</option>
-            <option value="NEAR">NEAR — NEAR</option>
-            <option value="XRP">XRP — Ripple</option>
-            <option value="XLM">XLM — Stellar</option>
-            <option value="ALGO">ALGO — Algorand</option>
-            <option value="ETC">ETC — Ethereum Classic</option>
-            <option value="BCH">BCH — Bitcoin Cash</option>
-            <option value="ZEC">ZEC — Zcash</option>
-            <option value="DASH">DASH — Dash</option>
-          </optgroup>
-          <optgroup label="Polygon / L2 / DeFi">
-            <option value="POL">POL (MATIC) — Polygon Bridge $DSN</option>
-            <option value="ARB">ARB — Arbitrum</option>
-            <option value="OP">OP — Optimism</option>
-            <option value="LINK">LINK — Chainlink</option>
-            <option value="UNI">UNI — Uniswap</option>
-            <option value="AAVE">AAVE — Aave</option>
-            <option value="CRO">CRO — Cronos</option>
-            <option value="VET">VET — VeChain</option>
-            <option value="HBAR">HBAR — Hedera</option>
-            <option value="ICP">ICP — Internet Computer</option>
-          </optgroup>
-          <optgroup label="AI & DePIN Compute">
-            <option value="FET">FET — Artificial Superintelligence</option>
-            <option value="TAO">TAO — Bittensor</option>
-            <option value="AKT">AKT — Akash Network</option>
-            <option value="GRT">GRT — The Graph</option>
-            <option value="ROSE">ROSE — Oasis Network</option>
-            <option value="HOT">HOT — Holo</option>
-            <option value="SC">SC — Siacoin</option>
-          </optgroup>
-          <optgroup label="Meme & Gaming">
-            <option value="DOGE">DOGE — Dogecoin</option>
-            <option value="SHIB">SHIB — Shiba Inu</option>
-            <option value="PEPE">PEPE — Pepe</option>
-            <option value="FLOKI">FLOKI — Floki</option>
-            <option value="BABYDOGE">BABYDOGE — Baby Doge</option>
-            <option value="GALA">GALA — Gala</option>
-            <option value="MANA">MANA — Decentraland</option>
-            <option value="SAND">SAND — The Sandbox</option>
-            <option value="ENJ">ENJ — Enjin</option>
-            <option value="CHZ">CHZ — Chiliz</option>
-          </optgroup>
-        </select>
+      <div class="card">
+        <h2>Mining Pending (Live Pool)</h2>
+        <div class="metric gold" id="pending-sol">-- SOL</div>
+        <div class="bar-wrap"><div class="bar-fill" id="payout-bar"></div></div>
+        <div class="sub" id="payout-txt">Progresso verso payout auto 0.05 SOL: --%</div>
       </div>
-      <div>
-        <label>2. Algoritmo Hardware</label>
-        <select id="algo" onchange="buildCmd()">
-          <option value="rx.unmineable.com:3333|xmrig">CPU — RandomX (XMRig)</option>
-          <option value="kp.unmineable.com:3333|lolMiner --algo AUTOLYKOS2">GPU — Autolykos2 (lolMiner)</option>
-          <option value="kawpow.unmineable.com:3333|lolMiner --algo KAWPOW">GPU — KawPow (lolMiner)</option>
-          <option value="etchash.unmineable.com:3333|lolMiner --algo ETCHASH">GPU — Etchash (lolMiner)</option>
-          <option value="kheavyhash.unmineable.com:3333|lolMiner --algo KASPA">GPU — kHeavyHash (lolMiner)</option>
-        </select>
+      <div class="card">
+        <h2>Hashrate &amp; Worker Attivi</h2>
+        <div class="metric" id="hashrate-val">-- KH/s</div>
+        <div class="sub" id="workers-txt">Worker connessi: -- · Algo: RandomX → SOL</div>
       </div>
-      <div>
-        <label>3. Wallet Destinazione (Default: Treasury)</label>
-        <input id="wallet" value="6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" oninput="buildCmd()" />
+      <div class="card">
+        <h2>Treasury On-Chain SOL</h2>
+        <div class="metric" id="sol-bal">-- SOL</div>
+        <div class="sub">Wallet: 6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD</div>
       </div>
-      <div>
-        <label>4. Nome Worker</label>
-        <input id="worker" value="ZDOS_VELVET_01" oninput="buildCmd()" />
+      <div class="card">
+        <h2>Riserva On-Chain $DSN</h2>
+        <div class="metric" id="dsn-bal">-- $DSN</div>
+        <div class="sub" id="hw-spec">Nodo VPS: -- Core / -- GB RAM</div>
       </div>
     </div>
 
-    <div class="out" id="cmdBox"></div>
+    <div class="panel">
+      <h2 style="color:var(--cyan);font-size:1rem;margin-bottom:6px;">
+        Turbo-Boost Nodo xAI (539 GB RAM) · HugePages 1GB + MSR Mod (+35% Hashrate)
+      </h2>
+      <p class="sub">
+        Lancia questo comando sul server xAI da 539 GB con <code>sudo</code> per sbloccare tutti i core fisici, le pagine da 1 GB e i registri MSR:
+      </p>
 
-    <div class="btns">
-      <button class="btn-gold" onclick="copyCmd()">Copia Comando Miner</button>
-      <a class="btn btn-red" href="https://swap.x-zdos.it" target="_blank">Auto-Swap in $OV / $DSN (ZSwap)</a>
-      <a class="btn btn-red" href="https://velvet.x-zdos.it/zara/" target="_blank">Console Zara AGI</a>
+      <div class="row">
+        <div>
+          <label>Asset Payout Diretto</label>
+          <select id="coin" onchange="renderCmd()">
+            <option value="SOL" selected>SOL (Solana Mainnet)</option>
+            <option value="XMR">XMR (Monero Native)</option>
+          </select>
+        </div>
+        <div>
+          <label>Wallet Destinazione ZDOS</label>
+          <input id="wallet" value="6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" oninput="renderCmd()" />
+        </div>
+        <div>
+          <label>Identificativo Worker</label>
+          <input id="worker" value="OurVault" oninput="renderCmd()" />
+        </div>
+      </div>
+
+      <pre id="cmd-box"></pre>
+
+      <div class="btns">
+        <button class="btn btn-primary" onclick="copyCmd()">Copia Super Comando XMRig</button>
+        <a class="btn btn-sec" id="dl-cfg" href="/api/vault/config.json?worker=OurVault&coin=SOL">Scarica config.json Turbo</a>
+        <a class="btn btn-sec" href="https://swap.x-zdos.it/?ref=6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD">Converti SOL → $DSN su zSWAP</a>
+        <a class="btn btn-sec" href="/fomo/">Mercato Live $DSN</a>
+        <a class="btn btn-sec" href="/">Home ZDOS</a>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-function buildCmd() {
-  const coin = document.getElementById("coin").value;
-  const [pool, bin] = document.getElementById("algo").value.split("|");
-  const wallet = document.getElementById("wallet").value.trim() || "6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD";
-  const worker = document.getElementById("worker").value.trim() || "ZDOS_VELVET_01";
-  const userStr = `${coin}:${wallet}.${worker}#velvet-empire`;
-  const cmd = bin === "xmrig"
-    ? `./xmrig -o stratum+tcp://${pool} -a rx -k -u ${userStr} -p x`
-    : `./${bin} --pool ${pool} --user ${userStr}`;
-  document.getElementById("cmdBox").textContent = cmd;
-}
-function copyCmd() {
-  navigator.clipboard.writeText(document.getElementById("cmdBox").textContent);
-  alert("Comando unMineable copiato negli appunti!");
-}
-buildCmd();
-</script>
+  <script>
+    function renderCmd() {
+      const coin = document.getElementById("coin").value;
+      const wallet = document.getElementById("wallet").value.trim();
+      const worker = document.getElementById("worker").value.trim() || "OurVault";
+      const cmd = `sudo sysctl -w vm.nr_hugepages=1280 && sudo ./xmrig -o rx.unmineable.com:3333 -a rx -k -u ${coin}:${wallet}.${worker}#qyk1-3hb3 -p x --cpu-max-threads-hint=75 --randomx-1gb-pages --donate-level=1`;
+      document.getElementById("cmd-box").textContent = cmd;
+      document.getElementById("dl-cfg").href = `/api/vault/config.json?worker=${encodeURIComponent(worker)}&coin=${encodeURIComponent(coin)}`;
+    }
+
+    function copyCmd() {
+      navigator.clipboard.writeText(document.getElementById("cmd-box").textContent);
+      alert("Comando Turbo ZDOS Vault Miner copiato!");
+    }
+
+    async function syncTelemetry() {
+      try {
+        const res = await fetch("/api/vault/status");
+        const data = await res.json();
+        document.getElementById("pending-sol").textContent = `${data.mining.pendingSol} SOL`;
+        document.getElementById("payout-bar").style.width = `${data.mining.payoutProgressPct}%`;
+        document.getElementById("payout-txt").textContent = `Progresso verso payout auto ${data.mining.thresholdSol} SOL: ${data.mining.payoutProgressPct}%`;
+        document.getElementById("hashrate-val").textContent = `${data.mining.totalHashrateKhs} KH/s`;
+        document.getElementById("workers-txt").textContent = `Worker online: ${data.mining.onlineWorkers} · Pool: ${data.pool}`;
+        document.getElementById("sol-bal").textContent = `${data.chain.solBalance} SOL`;
+        document.getElementById("dsn-bal").textContent = `${Number(data.chain.dsnBalance).toLocaleString("it-IT")} $DSN`;
+        document.getElementById("hw-spec").textContent = `VPS: ${data.hardware.cores} Core / ${data.hardware.totalMemGB} GB RAM`;
+        document.getElementById("node-badge").textContent = "● ZDOS VAULT v2.0 LIVE (POOL + RPC)";
+      } catch (e) {
+        document.getElementById("node-badge").textContent = "● SINCRONIZZAZIONE...";
+      }
+    }
+
+    renderCmd();
+    syncTelemetry();
+    setInterval(syncTelemetry, 20000);
+  </script>
 </body>
 </html>

@@ -29,7 +29,6 @@
     '<a href="https://x-zdos.it/our-vault/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🏦 $OV — Our Vault (unMineable)</a>',
     '<a href="https://swap.x-zdos.it/?ref=6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" target="_blank" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🔄 ZSwap DEX Solana</a>',
     '<a href="https://x-zdos.it/zlang/linguaggio/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">⚡ ZLang, VM ZLB2 & Monete</a>',
-    '<a href="https://velvet.x-zdos.it/hub/" style="color:#d7b46a;text-decoration:none;font-weight:700;padding:6px 8px;border-radius:8px;border:1px solid rgba(215,180,106,0.35);margin-top:4px;">💋 Passa al Polo AI & Our Velvet →</a>',
     '</div>'
   ].join("");
 
