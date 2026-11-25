@@ -1,3 +1,4 @@
+try { process.loadEnvFile("/root/velvet-claw/.env"); } catch (_) {}
 async function callClawSafe(payload, fallbackText) {
   for (let i = 0; i < 3; i++) {
     try {
@@ -35,7 +36,7 @@ for (const envPath of ["/root/velvet-claw/.env", "/root/velvet-daemon/.env", "/r
   }
 }
 
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.BOT_TOKEN || process.env.ZXSOLANA_TOKEN;
+const DISCORD_TOKEN = process.env.DISCORD_ZLANG_TOKEN || process.env.DISCORD_TOKEN || process.env.BOT_TOKEN || process.env.ZXSOLANA_TOKEN;
 
 // Inizializza tabelle RPG e collegamento Badge Card Utente in claw_memory.db
 execFileSync("python3", ["-c", `

@@ -25,7 +25,7 @@
     '</div>',
     '<div style="display:grid;gap:7px;">',
     '<a href="https://x-zdos.it/fomo/" style="color:#14f195;text-decoration:none;font-weight:700;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🚀 Solana Terminal ($DSN & $OV)</a>',
-    '<a href="https://quest.x-zdos.it" target="_blank" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🧠 Miner Umano (Quest & Merit)</a>',
+    '<a href="https://ourvelvet.online/magazine/" target="_blank" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">📰 Velvet Magazine</a>',
     '<a href="https://x-zdos.it/our-vault/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🏦 $OV — Our Vault (unMineable)</a>',
     '<a href="https://swap.x-zdos.it/?ref=6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD" target="_blank" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">🔄 ZSwap DEX Solana</a>',
     '<a href="https://x-zdos.it/zlang/linguaggio/" style="color:#fff;text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.04);">⚡ ZLang, VM ZLB2 & Monete</a>',

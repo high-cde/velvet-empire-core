@@ -1,3 +1,4 @@
+try { process.loadEnvFile("/root/velvet-claw/.env"); } catch (_) {}
 async function callClawSafe(payload, fallbackText) {
   for (let i = 0; i < 3; i++) {
     try {

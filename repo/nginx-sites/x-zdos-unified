@@ -25,6 +25,13 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
     server_name x-zdos.it;
+
+    location ^~ /api/mining/ {
+        proxy_pass http://127.0.0.1:8847;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
     ssl_certificate /etc/letsencrypt/live/x-zdos.it/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/x-zdos.it/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
@@ -162,7 +169,7 @@ server {
     location = /mining { return 301 /our-vault/; }
 
     location ^~ /api/vault/ {
-        proxy_pass http://127.0.0.1:8844/;
+        proxy_pass http://127.0.0.1:8846/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
@@ -238,12 +245,85 @@ server {
         try_files $uri $uri/ /zpool/index.html;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
+        location = /magazine { return 301 https://ourvelvet.online/magazine/; }
+    location ^~ /magazine/ { return 301 https://ourvelvet.online$request_uri; }
+    location = /ai-directory { return 301 https://ourvelvet.online/ai-directory/; }
+    location ^~ /ai-directory/ { return 301 https://ourvelvet.online$request_uri; }
+    location ^~ /mining/ { return 301 /our-vault/; }
+
     location ^~ /our-vault/ {
         alias /var/www/zpool-ai/;
         index index.html;
         try_files $uri $uri/ /our-vault/index.html;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
+
+    # >>> ZDOS_CREATOR_8868_START
+    location ^~ /creator/ {
+        proxy_pass http://127.0.0.1:8868/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    location = /creator {
+        return 301 /creator/;
+    }
+    # >>> ZDOS_CREATOR_8868_END
+
+    # >>> OURVELVET_CREATOR_BOARD_START
+    location ^~ /creator-board {
+        proxy_pass http://127.0.0.1:8872/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_CREATOR_BOARD_END
+
+    # >>> OURVELVET_MEAT_DISCOVER_START
+    location ^~ /discover {
+        proxy_pass http://127.0.0.1:8878/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    location ^~ /radar {
+        proxy_pass http://127.0.0.1:8878/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_MEAT_DISCOVER_END
+
+    # >>> OURVELVET_CARDS_YEN_START
+    location ^~ /ourvelvet {
+        proxy_pass http://127.0.0.1:8880/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_CARDS_YEN_END
+
+    # >>> OURVELVET_RED_LIVE_START
+    location ^~ /live {
+        proxy_pass http://127.0.0.1:8876/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_RED_LIVE_END
+
+
+
+
+
+
+
 
     location / {
         proxy_set_header Accept-Encoding "";
