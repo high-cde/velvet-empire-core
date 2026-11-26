@@ -9,7 +9,7 @@ server {
 
     listen 80;
     listen [::]:80;
-    server_name beta.x-zdos.it zx.x-zdos.it;
+    server_name beta.x-zdos.it;
     server_tokens off;
 
     location ^~ /.well-known/acme-challenge/ {
@@ -29,10 +29,12 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name beta.x-zdos.it zx.x-zdos.it;
+    server_name beta.x-zdos.it;
     server_tokens off;
-    ssl_certificate /etc/letsencrypt/live/zx.x-zdos.it/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/zx.x-zdos.it/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/beta.x-zdos.it/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/beta.x-zdos.it/privkey.pem;
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+ # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 

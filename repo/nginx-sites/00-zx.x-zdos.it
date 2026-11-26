@@ -1,18 +1,28 @@
-# >>> ZX_XZDOS_8884_START
 server {
     listen 80;
     listen [::]:80;
     server_name zx.x-zdos.it;
-    return 301 https://$host$request_uri;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        default_type "text/plain";
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
 
 server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name zx.x-zdos.it;
 
-    ssl_certificate /etc/letsencrypt/live/x-zdos.it/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/x-zdos.it/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/zx.x-zdos.it/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zx.x-zdos.it/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     location / {
         proxy_pass http://127.0.0.1:8884;
@@ -24,4 +34,3 @@ server {
         add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0";
     }
 }
-# >>> ZX_XZDOS_8884_END

@@ -7,11 +7,13 @@ server {
     location / { return 301 https://$host$request_uri; }
 }
 server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name agency.x-zdos.it;
     ssl_certificate /etc/letsencrypt/live/agency.x-zdos.it/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/agency.x-zdos.it/privkey.pem;
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 

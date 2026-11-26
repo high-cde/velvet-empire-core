@@ -1,1 +1,544 @@
-/etc/nginx/sites-available/ourvelvet.online
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ourvelvet.online www.ourvelvet.online;
+    location = / { root /var/www/ourvelvet; rewrite ^ /index.html break; }
+    # >>> OV_NOCACHE_START
+    add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+    add_header Pragma "no-cache" always;
+    add_header Expires "0" always;
+    # >>> OV_NOCACHE_END
+
+    return 301 https://ourvelvet.online$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name ourvelvet.online www.ourvelvet.online;
+    location = / { root /var/www/ourvelvet; rewrite ^ /index.html break; }
+    # >>> OV_NOCACHE_START
+    add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+    add_header Pragma "no-cache" always;
+    add_header Expires "0" always;
+    # >>> OV_NOCACHE_END
+
+    ssl_certificate /etc/letsencrypt/live/ourvelvet.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ourvelvet.online/privkey.pem;
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    root /var/www/velvethub/dist/public;
+    index index.html;
+
+    include /etc/nginx/snippets/velvet-hub-v2.conf;
+
+    location = /ai-directory {
+        return 301 /ai-directory/;
+    }
+
+    location ^~ /ai-directory/ {
+        alias /var/www/velvethub/dist/public/ai-directory/;
+        index index.html;
+        try_files $uri $uri/ /ai-directory/index.html /index.html;
+    }
+
+    location = /command-deck {
+        return 301 /command-deck/;
+    }
+
+    location ^~ /command-deck/ {
+        alias /var/www/velvethub/dist/public/command-deck/;
+        index index.html;
+        try_files $uri $uri/ /command-deck/index.html /index.html;
+    }
+
+    location = /map {
+        return 301 /map/;
+    }
+
+    location ^~ /map/ {
+        alias /var/www/velvethub/dist/public/map/;
+        index index.html;
+        try_files $uri $uri/ /map/index.html /index.html;
+    }
+
+    location ^~ /api/velvet-ai/ {
+        proxy_pass http://127.0.0.1:4195/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/velvet-pay/ {
+        proxy_pass http://127.0.0.1:8855;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/zara/ {
+        proxy_pass http://127.0.0.1:8811/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/mining/ {
+        proxy_pass http://127.0.0.1:8846/api/mining/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/zpool/ {
+        proxy_pass http://127.0.0.1:8844/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/mag-social/ {
+        proxy_pass http://127.0.0.1:8822/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/forge/ {
+        proxy_pass http://127.0.0.1:8833/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/unmineable/ {
+        proxy_pass http://127.0.0.1:4188;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+
+    # === ROTTE BACKEND E PANNELLI RIPRISTINATI ===
+    location = /lodge-card.html {
+        alias /var/www/ourvelvet/lodge-card.html;
+        default_type text/html;
+    }
+
+    location ^~ /assets/ {
+        root /var/www/velvethub/dist/public;
+        try_files $uri @ourvelvet_assets;
+    }
+
+    location @ourvelvet_assets {
+        root /var/www/ourvelvet;
+        try_files $uri =404;
+    }
+
+    location ^~ /api/solana/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/auth/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/access/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/velvet/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ^~ /api/verify-ov/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /badge {
+        alias /var/www/velvethub/dist/public/badge.html;
+        default_type text/html;
+    }
+
+
+
+    location /api/meat-radar/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /api/bridge/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /api/global-id/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location = /api/solana-rpc {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location = /api/geo/ip-radar {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /api/geo/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location = /dashboard.html {
+        alias /var/www/ourvelvet/dashboard.html;
+        auth_basic "OurVelvet staff";
+        auth_basic_user_file /etc/nginx/htpasswd-velvet-staff;
+        default_type text/html;
+    }
+
+    location = /shop.html {
+        alias /var/www/ourvelvet/shop.html;
+        default_type text/html;
+    }
+
+    location /api/shop/ {
+        proxy_pass http://127.0.0.1:8899;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location = /invite-gate.html {
+        alias /var/www/ourvelvet/invite-gate.html;
+        default_type text/html;
+    }
+
+    location ^~ /hub/assets/ {
+        alias /root/velvet-hub/client/dist/public/assets/;
+        try_files $uri =404;
+    }
+
+    location ^~ /ai-directory/api/ {
+        proxy_pass http://127.0.0.1:4188/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location = /api/promo-pack {
+        proxy_pass http://127.0.0.1:4188;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location ^~ /ai-studio/ {
+        alias /var/www/velvethub/dist/public/ai-studio/;
+        index index.html;
+        try_files $uri $uri/ /ai-studio/index.html;
+    }
+
+    location = /.well-known/ai-agent.json {
+        proxy_pass http://127.0.0.1:8811/.well-known/ai-agent.json;
+        proxy_set_header Host $host;
+        default_type application/json;
+    }
+
+    location ^~ /zara/ {
+        alias /var/www/velvet-zara/;
+        index index.html;
+        try_files $uri $uri/ /zara/index.html;
+    }
+
+location ~ ^/velvetst(ar|ra)s/?$ {
+        alias /var/www/velvet-stars/index.html;
+        default_type text/html;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    location ^~ /pay/ {
+        alias /var/www/pay.x-zdos.it/;
+        index index.html;
+        try_files $uri $uri/ /pay/index.html;
+    }
+
+    location = /pay { return 301 /pay/; }
+
+    location ^~ /zpool/ {
+        alias /var/www/zpool-ai/;
+        index index.html;
+        try_files $uri $uri/ /zpool/index.html;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    
+    location = /ai { return 301 /ai/; }
+    location ^~ /ai/ {
+        alias /var/www/ourvelvet/ai/;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+    location ^~ /magazine/ {
+        alias /var/www/ourvelvet/magazine/public/;
+        index index.html;
+        try_files $uri $uri/ /magazine/index.html;
+    }
+
+    location ^~ /portal-assets/ {
+        alias /var/www/velvet-portal/;
+    }
+
+    location = /zara {
+        return 301 /zara/;
+    }
+
+    location = /magazine {
+        return 301 /magazine/;
+    }
+
+    location = /our-vault {
+        return 301 /our-vault/;
+    }
+
+    location = /mining {
+        return 301 /mining/;
+    }
+
+    location = /zlang {
+        return 301 /zlang/linguaggio/;
+    }
+
+location = /forge { return 301 /forge/; }
+
+    location ^~ /forge/ {
+        alias /var/www/zdos-portal/;
+        index forge.html;
+        try_files /forge.html =404;
+    }
+
+    location = /__manus__ {
+        return 301 /__manus__/;
+    }
+
+    location ^~ /__manus__/ {
+        alias /var/www/velvethub/dist/public/__manus__/;
+        index index.html;
+        try_files $uri $uri/ /__manus__/index.html /index.html;
+    }
+
+    location = /ai-studio {
+        return 301 /ai-studio/;
+    }
+
+    location = /api {
+        return 301 /api/;
+    }
+
+    location = /docs {
+        return 301 /docs/;
+    }
+
+    location ^~ /docs/ {
+        alias /var/www/velvethub/dist/public/docs/;
+        index index.html;
+        try_files $uri $uri/ /docs/index.html /index.html;
+    }
+
+    location = /radar {
+        return 301 /radar/;
+    }
+
+    location ^~ /radar/ {
+        alias /var/www/velvethub/dist/public/radar/;
+        index index.html;
+        try_files $uri $uri/ /radar/index.html /index.html;
+    }
+
+    location = /scripts {
+        return 301 /scripts/;
+    }
+
+    location ^~ /scripts/ {
+        alias /var/www/velvethub/dist/public/scripts/;
+        index index.html;
+        try_files $uri $uri/ /scripts/index.html /index.html;
+    }
+
+    location = /hub {
+        return 301 /hub-v2/;
+    }
+
+    location = /finale { return 301 /finale/; }
+    location ^~ /finale/ {
+        proxy_pass http://127.0.0.1:3210/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # >>> ZDOS_CREATOR_8868_START
+    location ^~ /creator/ {
+        proxy_pass http://127.0.0.1:8868/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    location = /creator {
+        return 301 /creator/;
+    }
+    # >>> ZDOS_CREATOR_8868_END
+
+    # >>> OURVELVET_CREATOR_BOARD_START
+    location ^~ /creator-board {
+        proxy_pass http://127.0.0.1:8872/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_CREATOR_BOARD_END
+
+    # >>> OURVELVET_MEAT_DISCOVER_START
+    location ^~ /discover {
+        proxy_pass http://127.0.0.1:8878/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    location ^~ /radar {
+        proxy_pass http://127.0.0.1:8878/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_MEAT_DISCOVER_END
+
+    # >>> OURVELVET_CARDS_YEN_START
+    location ^~ /ourvelvet {
+        proxy_pass http://127.0.0.1:8880/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_CARDS_YEN_END
+
+    # >>> OURVELVET_RED_LIVE_START
+    location ^~ /live {
+        proxy_pass http://127.0.0.1:8876/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    # >>> OURVELVET_RED_LIVE_END
+
+    # >>> OURVELVET_VACATION_CLEAN_START
+    location ^~ /vacation {
+        return 301 https://zx.x-zdos.it/#vacation-sec;
+    }
+    # >>> OURVELVET_VACATION_CLEAN_END
+
+
+
+
+
+
+
+
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # === VELVET CITY 24/7 & PALACE API ===
+    location = /city { return 301 /city/; }
+    location ^~ /city/ {
+        alias /var/www/velvethub/hub-v2/;
+        index index.html;
+        try_files $uri $uri/ /city/index.html;
+    }
+    location ^~ /api/palace/ {
+        proxy_pass http://127.0.0.1:8798/api/palace/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
