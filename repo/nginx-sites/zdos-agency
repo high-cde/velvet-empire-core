@@ -1,12 +1,41 @@
 # ZDOS Agency su agency.x-zdos.it (DSN-X market-ready). Resta con password finché doc non fissa nome e prezzi.
 server {
+    # === DOMCOIN_RPC_START ===
+    location ^~ /dom-rpc {
+        proxy_pass http://127.0.0.1:8896/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    # === DOMCOIN_RPC_END ===
+
+
     listen 80;
     listen [::]:80;
     server_name agency.x-zdos.it;
+    location ^~ /api/monetary/ {
+        proxy_pass http://127.0.0.1:8890/api/monetary/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location ^~ /.well-known/acme-challenge/ { root /var/www/letsencrypt; }
     location / { return 301 https://$host$request_uri; }
 }
 server {
+    # === DOMCOIN_RPC_START ===
+    location ^~ /dom-rpc {
+        proxy_pass http://127.0.0.1:8896/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    # === DOMCOIN_RPC_END ===
+
+
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name agency.x-zdos.it;

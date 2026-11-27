@@ -1,4 +1,27 @@
 server {
+    # === SOL_RPC_PROXY_START ===
+    location ^~ /api/sol-rpc {
+        proxy_pass http://127.0.0.1:8896/sol-rpc;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    # === SOL_RPC_PROXY_END ===
+
+
+    # === MINT_LSD_START ===
+    location ^~ /mint-lsd/ {
+        root /var/www/ourvelvet;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+    # === MINT_LSD_END ===
+
+
+
+
+
+
     listen 80;
     listen [::]:80;
     server_name ourvelvet.online www.ourvelvet.online;
@@ -13,9 +36,34 @@ server {
 }
 
 server {
+    # === SOL_RPC_PROXY_START ===
+    location ^~ /api/sol-rpc {
+        proxy_pass http://127.0.0.1:8896/sol-rpc;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    # === SOL_RPC_PROXY_END ===
+
+
+    # === MINT_LSD_START ===
+    location ^~ /mint-lsd/ {
+        root /var/www/ourvelvet;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+    # === MINT_LSD_END ===
+
+
+
+
+
+
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name ourvelvet.online www.ourvelvet.online;
+
+
     location = / { root /var/www/ourvelvet; rewrite ^ /index.html break; }
     # >>> OV_NOCACHE_START
     add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
@@ -31,6 +79,31 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     root /var/www/velvethub/dist/public;
+
+    # OurVelvet HotHoliday 18+ & Z-X Pay
+    location = /hotholiday {
+        return 301 /hotholiday/;
+    }
+
+
+
+    location = /destinations { return 301 /hotholiday/; }
+    location ^~ /destinations/ { return 301 /hotholiday/; }
+    location ^~ /api/hotholiday/ {
+        proxy_pass http://127.0.0.1:3310/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location ^~ /hotholiday/ {
+        alias /var/www/ourvelvet/hotholiday/;
+        index index.html;
+        add_header Cache-Control "no-store, no-cache, must-revalidate" always;
+    }
+
+
+
     index index.html;
 
     include /etc/nginx/snippets/velvet-hub-v2.conf;
@@ -524,6 +597,15 @@ location = /forge { return 301 /forge/; }
 
 
 
+        location ^~ /api/monetary/ {
+        proxy_pass http://127.0.0.1:8890/api/monetary/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location / {
         try_files $uri $uri/ =404;
     }
@@ -541,4 +623,17 @@ location = /forge { return 301 /forge/; }
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
+
+
+
+
+# === DOMCOIN_RPC_START ===
+location ^~ /api/domcoin/ {
+    proxy_pass http://127.0.0.1:8896/;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+# === DOMCOIN_RPC_END ===
+
 }

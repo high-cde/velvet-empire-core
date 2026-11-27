@@ -1,0 +1,29 @@
+// === ZDOS Global Monetary & K.I.R.A. Ecosystem Gateway v1.0 ===
+module ZdosGlobalMonetaryGateway {
+    const VERSION = "1.0.0-sovereign";
+    const TREASURY_WALLET = "6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD";
+    const DSN_MINT = "35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4";
+    const OV_MINT  = "2EN6Y1zM4yyt41gE2muzdJSAgRCAZiXqnmkgpbrspump";
+    const LSD_FIXED_PEG_EUR = 0.0064;
+    const ZX_PAY_GATEWAY = "https://zx.x-zdos.it";
+    const KIRA_ENDPOINT = "http://127.0.0.1:3010";
+    const ZBASKET_ENDPOINT = "http://127.0.0.1:8864";
+    const VAULT_MINER_ENDPOINT = "http://127.0.0.1:8846";
+    const ZPOOL_ENDPOINT = "http://127.0.0.1:8844";
+
+    struct MonetaryRoute {
+        channel: str,
+        asset: str,
+        peg_eur: f64,
+        settlement_url: str,
+    }
+
+    fn routes() -> [MonetaryRoute; 4] {
+        return [
+            MonetaryRoute { channel: "Z-X Pay & Cashback", asset: "SOL / $DSN / L$D", peg_eur: 0.0064, settlement_url: "https://zx.x-zdos.it" },
+            MonetaryRoute { channel: "VelvetBasketPool",   asset: "BONK / $OV / L$D",  peg_eur: 0.0064, settlement_url: "https://basket.x-zdos.it" },
+            MonetaryRoute { channel: "Our Vault Miner",    asset: "$DSN / BONK (2x)",  peg_eur: 0.0064, settlement_url: "https://x-zdos.it/our-vault/" },
+            MonetaryRoute { channel: "Z-Pool AI Compute",  asset: "xzSOL / $DSN",      peg_eur: 0.0064, settlement_url: "https://x-zdos.it/zpool/" },
+        ];
+    }
+}

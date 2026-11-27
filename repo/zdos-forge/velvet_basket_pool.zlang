@@ -1,0 +1,72 @@
+// VelvetBasketPool (zBASKET) — Multi-Asset Treasury-Backed Liquidity Pool in ZLang
+// Live Portals: https://basket.x-zdos.it | https://velvet.x-zdos.it
+
+pool VelvetBasketPool {
+  symbol: "zBASKET"
+  version: "2.0.0-pancake-list"
+  treasury_wallet: "6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD"
+  disclaimer: "Valute di comunità e utilità interna. Nessun rendimento o profitto finanziario promesso."
+
+  treasury_anchors {
+    primary: "BONK"
+    secondary: "OV"
+    min_anchor_ratio_bps: 3500
+  }
+
+  assets {
+    asset BONK  { name: "Bonk",           chain: "Solana",   mint: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263", weight_bps: 2000, min_reserve_bps: 1000, max_single_tx_bps: 500 }
+    asset OV    { name: "OurVelvet",      chain: "Solana",   mint: "2EN6Y1zM4yyt41gE2muzdJSAgRCAZiXqnmkgpbrspump", weight_bps: 2000, min_reserve_bps: 1000, max_single_tx_bps: 500 }
+    asset DSN   { name: "xZDOS Sovereign",chain: "Solana",   mint: "35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4", weight_bps: 1200, min_reserve_bps: 500,  max_single_tx_bps: 350 }
+    asset LSD   { name: "Dom-Coin L$D",   chain: "ZDOS",     mint: "DOM_COIN_INTERNAL_MINT",                       weight_bps: 800,  min_reserve_bps: 300,  max_single_tx_bps: 250 }
+    asset XZSOL { name: "xZDOS Staked SOL",chain:"Solana",   mint: "XZSOL_SOVEREIGN_MINT",                         weight_bps: 700,  min_reserve_bps: 300,  max_single_tx_bps: 250 }
+    asset CAKE  { name: "PancakeSwap",    chain: "BNB/Bridge",mint:"0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",   weight_bps: 500,  min_reserve_bps: 200,  max_single_tx_bps: 250 }
+    asset WBNB  { name: "Wrapped BNB",    chain: "BNB/Bridge",mint:"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",   weight_bps: 450,  min_reserve_bps: 200,  max_single_tx_bps: 250 }
+    asset USDT  { name: "Tether USD",     chain: "Multi",    mint: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", weight_bps: 450,  min_reserve_bps: 200,  max_single_tx_bps: 300 }
+    asset USDC  { name: "USD Coin",       chain: "Multi",    mint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", weight_bps: 400,  min_reserve_bps: 200,  max_single_tx_bps: 300 }
+    asset JUP   { name: "Jupiter",        chain: "Solana",   mint: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",  weight_bps: 300,  min_reserve_bps: 150,  max_single_tx_bps: 200 }
+    asset RAY   { name: "Raydium",        chain: "Solana",   mint: "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R", weight_bps: 250,  min_reserve_bps: 100,  max_single_tx_bps: 200 }
+    asset WIF   { name: "dogwifhat",      chain: "Solana",   mint: "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm", weight_bps: 250,  min_reserve_bps: 100,  max_single_tx_bps: 200 }
+    asset BOME  { name: "BOOK OF MEME",   chain: "Solana",   mint: "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",  weight_bps: 250,  min_reserve_bps: 100,  max_single_tx_bps: 200 }
+    asset PYTH  { name: "Pyth Network",   chain: "Solana",   mint: "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3", weight_bps: 250,  min_reserve_bps: 100,  max_single_tx_bps: 200 }
+    asset HOLD  { name: "ZDOS Hold Vault",chain: "ZDOS",     mint: "ZDOS_HOLD_SOVEREIGN_VAULT",                    weight_bps: 200,  min_reserve_bps: 100,  max_single_tx_bps: 200 }
+  }
+
+  rule deposit_to_basket(token, amount, actor) {
+    require amount > 0
+    require amount <= max_single_tx_bps(token)
+    emit BasketDepositRecorded(token, amount, actor)
+  }
+}
+
+// === zBASKET v2.1 — 5-Pillar Staking & Boost Matrix ===
+module VelvetBasketStaking5Pillar {
+    const TREASURY = "6C61wDacAtx3QHQYVw17fnm5GEaEAnc1XienNJKn2bsD";
+    const DSN_MINT = "35w74RT77BPSYNpmzpvxmR9wu2ihpgzubKy4bkGHR3F4";
+    const OV_MINT  = "2EN6Y1zM4yyt41gE2muzdJSAgRCAZiXqnmkgpbrspump";
+    const LSD_PEG_EUR = 0.0064;
+    const FEE_SHARE_BPS = 500;   // rZDOS: 5.00% swap & bridge fee share
+    const MAX_BOOST_BPS = 20000; // bZDOS: fino a 2.00x (20000 bps)
+
+    struct LockTier {
+        days: u32,
+        boost_bps: u32,
+        vote_mult_bps: u32,
+        izdos_tier: str,
+    }
+
+    fn tiers() -> [LockTier; 4] {
+        return [
+            LockTier { days: 0,  boost_bps: 10000, vote_mult_bps: 5000,  izdos_tier: "Standard" },
+            LockTier { days: 7,  boost_bps: 12500, vote_mult_bps: 10000, izdos_tier: "Bronze Drop" },
+            LockTier { days: 30, boost_bps: 16000, vote_mult_bps: 15000, izdos_tier: "Silver IFO" },
+            LockTier { days: 90, boost_bps: 20000, vote_mult_bps: 20000, izdos_tier: "Sovereign VIP" },
+        ];
+    }
+
+    fn bridge_to_vault_miner(lock_days: u32) -> u32 {
+        if lock_days >= 90 { return 20000; }
+        if lock_days >= 30 { return 16000; }
+        if lock_days >= 7  { return 12500; }
+        return 10000;
+    }
+}
