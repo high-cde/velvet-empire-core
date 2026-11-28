@@ -27,7 +27,8 @@ server {
 }
 server {
     # === DOMCOIN_RPC_START ===
-    location ^~ /dom-rpc {
+
+location ^~ /dom-rpc {
         proxy_pass http://127.0.0.1:8896/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -58,8 +59,26 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     add_header Cache-Control "no-store" always;
     add_header Permissions-Policy "geolocation=(), camera=(), microphone=()" always;
 
+    location ^~ /api/agency/ {
+        proxy_pass http://127.0.0.1:8761/api/agency/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        client_max_body_size 24k;
+    }
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
     location ^~ /api/ {
-        proxy_pass http://127.0.0.1:8760/api/;
+        proxy_pass http://127.0.0.1:3300/api/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

@@ -746,5 +746,47 @@ async function loadSocialState() {
 
 init();
 </script>
+
+<!-- ZDOS VCHAIN ANCHOR RECEIPT WIDGET -->
+<section id="zdos-vchain-anchor-box" style="margin:18px 0;padding:14px 16px;border-radius:12px;background:rgba(12,18,28,0.72);backdrop-filter:blur(10px);border:1px solid rgba(120,220,255,0.22);font-family:monospace;color:#e6f4ff;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+    <strong style="color:#6ce5ff;letter-spacing:0.04em;">ZLANG / SOLANA ANCHOR RECEIPT</strong>
+    <span id="vchain-anchor-badge" style="font-size:12px;padding:2px 8px;border-radius:999px;background:rgba(108,229,255,0.14);color:#8ef0ff;">SYNCING...</span>
+  </div>
+  <div id="vchain-anchor-meta" style="font-size:12px;line-height:1.55;word-break:break-all;color:#cde4f7;">
+    Caricamento ultima ricevuta da /api/vchain/anchors...
+  </div>
+</section>
+<script>
+(async function loadZdosAnchorReceipt() {
+  const metaEl = document.getElementById("vchain-anchor-meta");
+  const badgeEl = document.getElementById("vchain-anchor-badge");
+  if (!metaEl || !badgeEl) return;
+  try {
+    const r = await fetch("/api/vchain/anchors", { cache: "no-store" });
+    const data = await r.json();
+    const item = data && data.latest ? data.latest : null;
+    if (!data || !data.ok || !item) {
+      badgeEl.textContent = "NO RECEIPT";
+      metaEl.textContent = "Nessuna ricevuta disponibile su /api/vchain/anchors.";
+      return;
+    }
+    const h = item.height ?? 0;
+    const head = item.headHash || "";
+    const rec = item.receiptHash || "";
+    const ts = item.ts || "";
+    const sol = item.solanaSig || "LOCAL_ZLANG_ONLY";
+    badgeEl.textContent = "HEIGHT #" + h;
+    metaEl.innerHTML =
+      "<div><b>HEAD:</b> " + head + "</div>" +
+      "<div><b>RECEIPT:</b> " + rec + "</div>" +
+      "<div><b>SOLANA:</b> " + sol + " &nbsp;|&nbsp; <b>TS:</b> " + ts + "</div>";
+  } catch (e) {
+    badgeEl.textContent = "OFFLINE";
+    metaEl.textContent = "Errore lettura /api/vchain/anchors: " + e.message;
+  }
+})();
+</script>
+
 </body>
 </html>

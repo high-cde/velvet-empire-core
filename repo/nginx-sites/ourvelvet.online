@@ -37,7 +37,8 @@ server {
 
 server {
     # === SOL_RPC_PROXY_START ===
-    location ^~ /api/sol-rpc {
+
+location ^~ /api/sol-rpc {
         proxy_pass http://127.0.0.1:8896/sol-rpc;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -61,7 +62,8 @@ server {
 
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name ourvelvet.online www.ourvelvet.online;
+    server_name ourvelvet.online;
+    include /etc/nginx/snippets/zdos-firma.conf;  # firma ZDOS/OurVelvet (rollback: /var/backups/firma/20261128-0224/rollback.sh)
 
 
     location = / { root /var/www/ourvelvet; rewrite ^ /index.html break; }
@@ -71,6 +73,15 @@ server {
     add_header Expires "0" always;
     # >>> OV_NOCACHE_END
 
+    location = /robots.txt {
+        alias /var/www/ourvelvet/robots.txt;
+        default_type text/plain;
+    }
+    location = /sitemap.xml {
+        alias /var/www/ourvelvet/sitemap.xml;
+        default_type application/xml;
+    }
+
     ssl_certificate /etc/letsencrypt/live/ourvelvet.online/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/ourvelvet.online/privkey.pem;
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -78,7 +89,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/velvethub/dist/public;
+    root /var/www/ourvelvet/hub-src/dist/public;
 
     # OurVelvet HotHoliday 18+ & Z-X Pay
     location = /hotholiday {
@@ -113,7 +124,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /ai-directory/ {
-        alias /var/www/velvethub/dist/public/ai-directory/;
+        alias /var/www/ourvelvet/hub-src/dist/public/ai-directory/;
         index index.html;
         try_files $uri $uri/ /ai-directory/index.html /index.html;
     }
@@ -123,7 +134,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /command-deck/ {
-        alias /var/www/velvethub/dist/public/command-deck/;
+        alias /var/www/ourvelvet/hub-src/dist/public/command-deck/;
         index index.html;
         try_files $uri $uri/ /command-deck/index.html /index.html;
     }
@@ -133,7 +144,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /map/ {
-        alias /var/www/velvethub/dist/public/map/;
+        alias /var/www/ourvelvet/hub-src/dist/public/map/;
         index index.html;
         try_files $uri $uri/ /map/index.html /index.html;
     }
@@ -175,7 +186,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/zpool/ {
-        proxy_pass http://127.0.0.1:8844/;
+        proxy_pass http://127.0.0.1:8844/api/zpool/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -227,7 +238,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /assets/ {
-        root /var/www/velvethub/dist/public;
+        root /var/www/ourvelvet/hub-src/dist/public;
         try_files $uri @ourvelvet_assets;
     }
 
@@ -237,7 +248,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/solana/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -246,7 +257,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/auth/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -255,7 +266,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/access/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -264,7 +275,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/velvet/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -273,7 +284,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /api/verify-ov/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -281,43 +292,40 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location = /badge {
-        alias /var/www/velvethub/dist/public/badge.html;
-        default_type text/html;
-    }
+    # /badge gestito da ourvelvet-velvet-pages.conf
 
 
 
     location /api/meat-radar/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
     location /api/bridge/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
     location /api/global-id/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
     location = /api/solana-rpc {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
     location = /api/geo/ip-radar {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -325,7 +333,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location /api/geo/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -345,7 +353,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location /api/shop/ {
-        proxy_pass http://127.0.0.1:8899;
+        proxy_pass http://127.0.0.1:8901;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -376,7 +384,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /ai-studio/ {
-        alias /var/www/velvethub/dist/public/ai-studio/;
+        alias /var/www/ourvelvet/hub-src/dist/public/ai-studio/;
         index index.html;
         try_files $uri $uri/ /ai-studio/index.html;
     }
@@ -388,16 +396,21 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     location ^~ /zara/ {
-        alias /var/www/velvet-zara/;
-        index index.html;
-        try_files $uri $uri/ /zara/index.html;
+        return 301 /magazine/;
     }
 
 location ~ ^/velvetst(ar|ra)s/?$ {
-        alias /var/www/velvet-stars/index.html;
-        default_type text/html;
+        return 404;
+    }
+
+
+    location ^~ /contracts/ {
+        alias /var/www/x-zdos-contracts/;
+        index index.html;
+        try_files $uri $uri/ /contracts/index.html;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
+    location = /contracts { return 301 /contracts/; }
 
     location ^~ /pay/ {
         alias /var/www/pay.x-zdos.it/;
@@ -415,12 +428,8 @@ location ~ ^/velvetst(ar|ra)s/?$ {
     }
 
     
-    location = /ai { return 301 /ai/; }
-    location ^~ /ai/ {
-        alias /var/www/ourvelvet/ai/;
-        index index.html;
-        try_files $uri $uri/ =404;
-    }
+    location = /ai { return 404; }
+    location ^~ /ai/ { return 404; }
     location ^~ /magazine/ {
         alias /var/www/ourvelvet/magazine/public/;
         index index.html;
@@ -432,7 +441,7 @@ location ~ ^/velvetst(ar|ra)s/?$ {
     }
 
     location = /zara {
-        return 301 /zara/;
+        return 301 /magazine/;
     }
 
     location = /magazine {
@@ -459,14 +468,11 @@ location = /forge { return 301 /forge/; }
         try_files /forge.html =404;
     }
 
-    location = /__manus__ {
-        return 301 /__manus__/;
-    }
-
+    location = /__manus__ { return 404; }
+    location = /__manus__/ { return 404; }
     location ^~ /__manus__/ {
-        alias /var/www/velvethub/dist/public/__manus__/;
-        index index.html;
-        try_files $uri $uri/ /__manus__/index.html /index.html;
+        alias /var/www/ourvelvet/hub-src/dist/public/__manus__/;
+        try_files $uri =404;
     }
 
     location = /ai-studio {
@@ -478,13 +484,15 @@ location = /forge { return 301 /forge/; }
     }
 
     location = /docs {
-        return 301 /docs/;
+        return 301 /docs/MAPPA_REINDIRIZZAMENTI_XZDOS.md;
     }
-
+    location = /docs/ {
+        return 301 /docs/MAPPA_REINDIRIZZAMENTI_XZDOS.md;
+    }
     location ^~ /docs/ {
-        alias /var/www/velvethub/dist/public/docs/;
-        index index.html;
-        try_files $uri $uri/ /docs/index.html /index.html;
+        alias /var/www/ourvelvet/hub-src/dist/public/docs/;
+        default_type text/plain;
+        try_files $uri =404;
     }
 
     location = /radar {
@@ -492,19 +500,17 @@ location = /forge { return 301 /forge/; }
     }
 
     location ^~ /radar/ {
-        alias /var/www/velvethub/dist/public/radar/;
+        alias /var/www/ourvelvet/hub-src/dist/public/radar/;
         index index.html;
         try_files $uri $uri/ /radar/index.html /index.html;
     }
 
-    location = /scripts {
-        return 301 /scripts/;
-    }
-
+    location = /scripts { return 404; }
+    location = /scripts/ { return 404; }
     location ^~ /scripts/ {
-        alias /var/www/velvethub/dist/public/scripts/;
-        index index.html;
-        try_files $uri $uri/ /scripts/index.html /index.html;
+        alias /var/www/ourvelvet/hub-src/dist/public/scripts/;
+        default_type text/plain;
+        try_files $uri =404;
     }
 
     location = /hub {
@@ -606,6 +612,25 @@ location = /forge { return 301 /forge/; }
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    # t414u: solo stima quota vDeFi (nessuna scrittura sul ledger); /api/vdefi/intent NON esposto qui
+    location = /api/vdefi/quote {
+        limit_except POST { deny all; }
+        client_max_body_size 8k;
+        proxy_pass http://127.0.0.1:8899/api/vdefi/quote;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    include /etc/nginx/snippets/ourvelvet-velvet-pages.conf;
+
     location / {
         try_files $uri $uri/ =404;
     }
@@ -613,7 +638,7 @@ location = /forge { return 301 /forge/; }
     # === VELVET CITY 24/7 & PALACE API ===
     location = /city { return 301 /city/; }
     location ^~ /city/ {
-        alias /var/www/velvethub/hub-v2/;
+        alias /var/www/ourvelvet/hub/;
         index index.html;
         try_files $uri $uri/ /city/index.html;
     }
@@ -636,4 +661,16 @@ location ^~ /api/domcoin/ {
 }
 # === DOMCOIN_RPC_END ===
 
+}
+
+# ALIGN-20261128: www HTTPS -> apex (HTTP already 301s to https://ourvelvet.online)
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.ourvelvet.online;
+    ssl_certificate /etc/letsencrypt/live/ourvelvet.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ourvelvet.online/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    return 301 https://ourvelvet.online$request_uri;
 }

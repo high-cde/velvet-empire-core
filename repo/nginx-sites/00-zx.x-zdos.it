@@ -27,6 +27,13 @@ server {
         default_type "text/plain";
     }
 
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
     location / {
         return 301 https://$host$request_uri;
     }
@@ -34,7 +41,8 @@ server {
 
 server {
     # === DOMCOIN_RPC_START ===
-    location ^~ /dom-rpc {
+
+location ^~ /dom-rpc {
         proxy_pass http://127.0.0.1:8896/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -46,6 +54,7 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name zx.x-zdos.it;
+    include /etc/nginx/snippets/zdos-firma.conf;  # firma ZDOS/OurVelvet (rollback: /var/backups/firma/20261128-0224/rollback.sh)
 
     ssl_certificate /etc/letsencrypt/live/zx.x-zdos.it/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/zx.x-zdos.it/privkey.pem;
@@ -53,13 +62,51 @@ server {
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
-    location / {
-        proxy_pass http://127.0.0.1:8884;
+    root /var/www/zx-store;
+    index index.html;
+    server_tokens off;
+
+    # API locali del store (Grok spento senza chiave; Starlink mock se manca l'antenna)
+    location ^~ /api/grok {
+        proxy_pass http://127.0.0.1:8742;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 35s;
+        client_max_body_size 32k;
+    }
+    location ^~ /api/starlink {
+        proxy_pass http://127.0.0.1:8742;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 20s;
+        client_max_body_size 8k;
+    }
+
+    include snippets/zx-rivista.conf;  # ARIA rivista (rollback: /var/backups/rivista/20261128-0150/rollback.sh)
+
+    location ~* ^/(server|career|\.venv|node_modules|\.git)(/|$) {
+        deny all;
+    }
+
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+    location / {
+        try_files $uri $uri/ =404;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0";
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
     }
 }

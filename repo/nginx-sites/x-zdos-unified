@@ -1,6 +1,6 @@
 server {
     # === DOMCOIN_RPC_START ===
-    location ^~ /dom-rpc {
+location ^~ /dom-rpc {
         proxy_pass http://127.0.0.1:8896/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -24,7 +24,15 @@ server {
 }
 server {
     # === DOMCOIN_RPC_START ===
-    location ^~ /dom-rpc {
+
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+location ^~ /dom-rpc {
         proxy_pass http://127.0.0.1:8896/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -58,6 +66,43 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name x-zdos.it;
+    include /etc/nginx/snippets/zdos-firma.conf;  # firma ZDOS/OurVelvet (rollback: /var/backups/firma/20261128-0224/rollback.sh)
+    include /etc/nginx/snippets/zdos-defi.conf;  # pannello DeFi unico (rollback: /var/backups/defi-panel/20261128-0250/rollback.sh)
+
+    # ÆSIR · Filiera (admin, auth staff esistente)
+    location = /aesir { return 301 /aesir/; }
+    location ^~ /aesir/api/ {
+        auth_basic "ZDOS staff";
+        auth_basic_user_file /etc/nginx/htpasswd-velvet-staff;
+        limit_except GET { deny all; }
+        proxy_pass http://127.0.0.1:4196;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Cache-Control "no-store" always;
+        add_header X-Robots-Tag "noindex, nofollow" always;
+    }
+    location ^~ /aesir/ {
+        auth_basic "ZDOS staff";
+        auth_basic_user_file /etc/nginx/htpasswd-velvet-staff;
+        alias /var/www/aesir/;
+        index index.html;
+        add_header Cache-Control "no-store" always;
+        add_header X-Robots-Tag "noindex, nofollow" always;
+    }
+    location ^~ /api/vchain/ {
+        proxy_pass http://127.0.0.1:8899/api/vchain/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    location ^~ /api/vdefi/ {
+        proxy_pass http://127.0.0.1:8899/api/vdefi/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
 
     location ^~ /api/monetary/ {
         proxy_pass http://127.0.0.1:8890/api/monetary/;
@@ -113,6 +158,14 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     # Zlang IDE (statico)
+    location = /vdefi { return 301 /vdefi/; }
+    location ^~ /vdefi/ {
+        alias /var/www/x-zdos-portal/current/vdefi/;
+        index index.html;
+        try_files $uri $uri/ /vdefi/index.html;
+        add_header Cache-Control "no-cache" always;
+    }
+
     location = /ide { return 301 /ide/; }
     location ^~ /ide/ {
         alias /var/www/zlang-ide/current/;
@@ -157,14 +210,14 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 
     # ZDESK reverse proxy (attivo su 127.0.0.1:8787)
     # DSN-X market-ready: redirect per link storici
-    location = /zroute { return 301 https://swap.x-zdos.it/zroute/; }
-    location ^~ /zroute/ { return 301 https://swap.x-zdos.it/zroute/; }
+    location = /zroute { return 301 /defi/#swap; }
+    location ^~ /zroute/ { return 301 /defi/#swap; }
     location = /dsn { return 301 https://x-zdos.it/#token; }
     location = /dsn/ { return 301 https://x-zdos.it/#token; }
     location = /zdesk { return 301 /zdesk/; }
     location /zdesk/ {
-        auth_basic "ZDESK";
-        auth_basic_user_file /etc/nginx/zdesk.htpasswd;
+        # [unlocked] auth_basic "ZDESK";
+        # [unlocked] auth_basic_user_file /etc/nginx/zdesk.htpasswd;
         proxy_pass http://127.0.0.1:8787/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
@@ -239,6 +292,15 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
     }
 
     
+
+    location ^~ /contracts/ {
+        alias /var/www/x-zdos-contracts/;
+        index index.html;
+        try_files $uri $uri/ /contracts/index.html;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+    location = /contracts { return 301 /contracts/; }
+
     location ^~ /pay/ {
         alias /var/www/velvet-pay/;
         index index.html;
@@ -375,6 +437,34 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 
 
 
+
+    # >>> ALIGN-20261128-START
+    location ^~ /api/velvet-pay/ {
+        proxy_pass http://127.0.0.1:8855;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location ^~ /portal-assets/ {
+        alias /var/www/velvet-portal/;
+    }
+    location = /assets/dom-coin.jpg {
+        alias /var/www/ourvelvet/assets/dom-coin.jpg;
+    }
+    location = /zdos-sovereign-kit.js {
+        alias /var/www/zpool-ai/zdos-sovereign-kit.js;
+    }
+    # >>> ALIGN-20261128-END
+
+    location ^~ /api/vcpu/ {
+        proxy_pass http://127.0.0.1:8900/api/vcpu/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Access-Control-Allow-Origin *;
+    }
 
     location / {
         proxy_set_header Accept-Encoding "";
